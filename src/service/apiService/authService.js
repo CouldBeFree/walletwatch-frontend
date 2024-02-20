@@ -8,6 +8,10 @@ class AuthService {
   static registerUser(userData) {
     return Gateway.post('/auth/register', userData);
   }
+
+  static getUser() {
+    return Gateway.get('/auth/getMe');
+  }
 }
 
 export default AuthService;

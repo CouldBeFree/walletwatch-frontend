@@ -7,17 +7,16 @@
       <v-list>
         <v-list-item
           prepend-avatar="https://randomuser.me/api/portraits/men/19.jpg"
-          title="Sandra Adams"
-          subtitle="sandra_a88@gmailcom"
+          :title="user.username"
+          :subtitle="user.email"
         ></v-list-item>
       </v-list>
 
       <v-divider></v-divider>
 
       <v-list density="compact" nav>
-        <v-list-item :link="true" exact :to="'/dashboard/applications'" prepend-icon="mdi-ansible" title="Applications" value="Applications"></v-list-item>
-        <v-list-item :link="true" exact :to="'/dashboard/users'" prepend-icon="mdi-text-account" title="Users" value="Users"></v-list-item>
-        <v-list-item :link="true" exact :to="'/dashboard/languages'" prepend-icon="mdi-translate" title="Languages" value="Languages"></v-list-item>
+        <v-list-item :link="true" exact :to="'/dashboard/incomes'" prepend-icon="mdi-cash-fast" title="Incomes" value="Incomes"></v-list-item>
+        <v-list-item :link="true" exact :to="'/dashboard/expenses'" prepend-icon="mdi-transfer" title="Expenses" value="Expenses"></v-list-item>
       </v-list>
 
       <v-divider></v-divider>
@@ -40,7 +39,10 @@
 <script setup>
   import { useTheme } from 'vuetify'
   import {LOCAL_STORAGE_TOKEN_NAME} from "@/constants";
+  import AuthService from "@/service/apiService/authService";
   import router from "@/router";
+  import {onMounted, reactive} from "vue";
+
   const theme = useTheme()
 
   const onToggle = () => {
@@ -51,4 +53,20 @@
     localStorage.removeItem(LOCAL_STORAGE_TOKEN_NAME);
     await router.push('/auth/login');
   };
+
+  let user = reactive({
+    email: null,
+    username: null
+  })
+
+  onMounted(async () => {
+    try {
+      const { data } = await AuthService.getUser();
+      user = {
+        ...data
+      }
+    } catch (e) {
+      console.error(e)
+    }
+  });
 </script>

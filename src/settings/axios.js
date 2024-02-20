@@ -13,10 +13,7 @@ export const Gateway = axios.create({
 });
 
 const onResponse = (response) => {
-  console.log('res');
   const { authorization } = response.headers;
-  console.log('authorization', authorization);
-  console.log('headers', response);
   if (authorization) {
     const token = authorization.replace('Bearer ', '');
     localStorage.setItem(LOCAL_STORAGE_TOKEN_NAME, token);
@@ -28,7 +25,9 @@ const onRequest = (request) => {
   const { url } = request;
   const token = localStorage.getItem(LOCAL_STORAGE_TOKEN_NAME);
   const { headers } = request;
-  if (token && (url !== LOGIN_URL && url !== REGISTER_URL)) headers.authorization = token;
+  if (token && (url !== LOGIN_URL && url !== REGISTER_URL)) {
+    headers.authorization = `Bearer ${token}`;
+  }
   return request;
 };
 
