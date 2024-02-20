@@ -39,11 +39,16 @@
 
 <script setup>
   import { useTheme } from 'vuetify'
+  import {LOCAL_STORAGE_TOKEN_NAME} from "@/constants";
+  import router from "@/router";
   const theme = useTheme()
 
   const onToggle = () => {
     theme.global.name.value = theme.global.current.value.dark ? 'light' : 'dark'
   }
 
-  const onLogout = () => {};
+  const onLogout = async () => {
+    localStorage.removeItem(LOCAL_STORAGE_TOKEN_NAME);
+    await router.push('/auth/login');
+  };
 </script>

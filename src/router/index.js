@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import {LOCAL_STORAGE_TOKEN_NAME} from "@/constants";
 
 const routes = [
   {
@@ -9,6 +10,8 @@ const routes = [
   {
     path: '/dashboard',
     component: () => import('@/layouts/default/Default.vue'),
+    beforeEnter: (to, from, next) => localStorage.getItem(LOCAL_STORAGE_TOKEN_NAME) ? next() : next({name: 'auth'}),
+    name: 'Dashboard',
     children: [
       {
         path: '',
@@ -21,6 +24,7 @@ const routes = [
     path: '/auth',
     redirect: 'auth/login',
     component: () => import(/* webpackChunkName: "authLayout" */ '@/layouts/auth/AuthLayout.vue'),
+    beforeEnter: (to, from, next) => localStorage.getItem(LOCAL_STORAGE_TOKEN_NAME) ? next({name: 'Home'}) : next(),
     children: [
       {
         path: 'registration',
@@ -40,14 +44,5 @@ const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
 })
-
-// router.beforeEach(async (to, from, next) => {
-//   const isAuthenticated = false;
-//   if (!isAuthenticated && to.name !== 'Login') {
-//     next({ name: 'Login' })
-//   } else {
-//     next()
-//   }
-// })
 
 export default router
