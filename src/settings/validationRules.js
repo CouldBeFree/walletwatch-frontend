@@ -1,6 +1,6 @@
 export const nameRules = [
   (v) => !!v || 'Name is required',
-  (v) => (v && v.length > 4) || 'Name must be less than 4 characters',
+  (v) => (v && v.length >= 4) || 'Name must be less than 4 characters',
 ];
 
 export const emailRules = [

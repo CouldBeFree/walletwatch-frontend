@@ -17,8 +17,10 @@
       v-model="user.password"
       :rules="passwordValidation"
       label="Password"
+      :append-icon="icon"
       required
-      type="password"
+      :type="passwordFieldType"
+      @click:append="onIconClick"
     ></v-text-field>
 
     <div class="d-flex flex-column">
@@ -40,21 +42,31 @@
 </template>
 
 <script setup>
-import {reactive, ref} from "vue";
+import {computed, reactive, ref} from "vue";
 import {emailRules, passwordRules} from '@/settings/validationRules';
 import AuthService from "@/service/apiService/authService";
 import router from "@/router";
+import getErrorMessage from "@/utils/getErrorMessage";
+import useFormStatusHandler from "@/composable/useFormStatusHandler";
+import { TEXT_TYPE, PASSWORD_TYPE } from '@/constants';
 
-const valid = ref(false);
 const emailValidation = ref(emailRules);
 const passwordValidation = ref(passwordRules);
-const loading = ref(false);
-const error = ref(null);
+
+const { loading, error, valid } = useFormStatusHandler();
 
 const user = reactive({
   email: '',
   password: ''
 });
+
+const passwordFieldType = ref(PASSWORD_TYPE);
+
+const icon = computed(() => passwordFieldType.value === PASSWORD_TYPE ? 'mdi-eye-off-outline' : 'mdi-eye-outline');
+
+const onIconClick = () => {
+  passwordFieldType.value === PASSWORD_TYPE ? passwordFieldType.value = TEXT_TYPE : passwordFieldType.value = PASSWORD_TYPE;
+}
 
 const submit = async () => {
   if (!valid.value) return;
@@ -64,7 +76,7 @@ const submit = async () => {
     error.value = null;
     await router.push('/dashboard')
   } catch (e) {
-    error.value = e.response?.data?.message;
+    error.value = getErrorMessage(e);
   } finally {
     loading.value = false;
   }

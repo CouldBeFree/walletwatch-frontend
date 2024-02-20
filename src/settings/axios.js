@@ -1,9 +1,10 @@
 import axios from "axios";
 import router from "@/router";
 import { LOCAL_STORAGE_TOKEN_NAME, LOGIN_URL, REGISTER_URL } from "@/constants";
+import getEnvironmentVar from "@/utils/getEnvironmentVar";
 
 export const Gateway = axios.create({
-  baseURL: 'http://localhost:8085',
+  baseURL: `${getEnvironmentVar('GATEWAY_API')}/api`,
   withCredentials: false,
   headers: {
     Accept: 'application/json',
