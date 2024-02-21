@@ -171,7 +171,6 @@
     try {
       loading.value = true;
       await Promise.all(promises);
-      // selected.selectedExpenses = [];
       Object.assign(selected, { selectedExpenses: [] })
       dialog.value = false;
       await getUsersExpenses();
