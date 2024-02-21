@@ -38,15 +38,15 @@
 
 <script setup>
   import { useTheme } from 'vuetify'
-  import {LOCAL_STORAGE_TOKEN_NAME} from "@/constants";
-  import AuthService from "@/service/apiService/authService";
+  import {LOCAL_STORAGE_TOKEN_NAME, LIGHT_THEME, DARK_THEME} from "@/constants";
+  import AuthService from "@/service/apiService/AuthService";
   import router from "@/router";
   import {onMounted, reactive} from "vue";
 
   const theme = useTheme()
 
   const onToggle = () => {
-    theme.global.name.value = theme.global.current.value.dark ? 'light' : 'dark'
+    theme.global.name.value = theme.global.current.value.dark ? LIGHT_THEME : DARK_THEME;
   }
 
   const onLogout = async () => {

@@ -44,7 +44,7 @@
 <script setup>
 import {computed, reactive, ref} from "vue";
 import {emailRules, passwordRules} from '@/settings/validationRules';
-import AuthService from "@/service/apiService/authService";
+import AuthService from "@/service/apiService/AuthService";
 import router from "@/router";
 import getErrorMessage from "@/utils/getErrorMessage";
 import useFormStatusHandler from "@/composable/useFormStatusHandler";

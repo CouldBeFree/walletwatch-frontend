@@ -50,7 +50,7 @@
 
 <script setup>
 import {reactive, ref} from "vue";
-import AuthService from "@/service/apiService/authService";
+import AuthService from "@/service/apiService/AuthService";
 import {emailRules, nameRules, passwordRules} from '@/settings/validationRules';
 import getErrorMessage from "@/utils/getErrorMessage";
 import useFormStatusHandler from '@/composable/useFormStatusHandler';
