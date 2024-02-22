@@ -1,6 +1,13 @@
 <template>
   <h1>Expenses</h1>
-  <UserExpenses />
+  <v-row
+    align="start"
+    no-gutters
+  >
+    <v-col lg="3">
+      <UserExpenses />
+    </v-col>
+  </v-row>
 </template>
 
 <script setup>

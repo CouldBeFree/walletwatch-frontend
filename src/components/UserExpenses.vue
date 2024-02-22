@@ -1,6 +1,5 @@
 <template>
   <v-card
-    width="400"
     prepend-icon="mdi-cash-multiple"
     title="My expenses"
   >
@@ -17,15 +16,15 @@
         </tr>
         </thead>
         <tbody>
-        <tr
-          v-for="expense in userExpenses.data"
-          :key="expense.id"
-        >
-          <td>{{ expense.expenses_category_name }}</td>
-          <td class="text-right">
-            <v-btn icon="mdi-delete" @click="onSelectItem(expense.id)" color="red" size="x-small"></v-btn>
-          </td>
-        </tr>
+          <tr
+            v-for="expense in userExpenses.data"
+            :key="expense.id"
+          >
+            <td>{{ expense.expenses_category_name }}</td>
+            <td class="text-right">
+              <v-btn icon="mdi-delete" @click="onSelectItem(expense)" color="red" size="x-small"></v-btn>
+            </td>
+          </tr>
         </tbody>
       </v-table>
     </template>
@@ -72,7 +71,7 @@
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn
-          @click="dialog = false"
+          @click="onCancelExpense"
           variant="flat"
           color="primary"
         >
@@ -98,9 +97,8 @@
   >
     <v-card>
       <v-card-title class="text-h5">
-        Use Google's location service?
+        Remove {{selectedExpense.val?.expenses_category_name}} expense?
       </v-card-title>
-      <v-card-text>Let Google help apps determine location. This means sending anonymous location data to Google, even when no apps are running.</v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn
@@ -121,20 +119,31 @@
       </v-card-actions>
     </v-card>
   </v-dialog>
+  <v-snackbar
+    v-model="snackState.isOpen"
+    :timeout="4000"
+    :color="snackState.type"
+  >
+    {{snackState.text}}
+  </v-snackbar>
 </template>
 
 <script setup>
   import {computed, ref} from "vue";
   import {onMounted, reactive} from "vue";
   import ExpenseService from "@/service/apiService/ExpenseService";
+  import useSnackBar from "@/composable/useSnackBar";
+  import getErrorMessage from "@/utils/getErrorMessage";
+
+  const { snackState, openSnackBar } = useSnackBar();
 
   let allExpenses = reactive([]);
-  let userExpenses = reactive({data: []});
-  let selected = reactive({selectedExpenses: []});
+  const userExpenses = reactive({data: []});
+  const selected = reactive({selectedExpenses: []});
+  const selectedExpense = reactive({ val: null });
   const loading = ref(false);
   const dialog = ref(false);
   const removeDialog = ref(false);
-  const selectedId = ref(null);
 
   let selectedIds = computed(() => selected.selectedExpenses.map(i => i.id));
   const isUsersExpenses = computed(() => userExpenses?.data.length);
@@ -143,27 +152,34 @@
     return allExpenses.filter(expense => !userExpenseNames.includes(expense.expenses_category_name));
   })
 
+  const onCancelExpense = () => {
+    dialog.value = false
+    Object.assign(selected, { selectedExpenses: [] });
+  }
+
   const onRemove = async () => {
     try {
       loading.value = true;
-      await ExpenseService.removeExpense(selectedId.value)
+      await ExpenseService.removeExpense(selectedExpense.val.id);
       await getUsersExpenses();
-      removeDialog.value = false;
+      openSnackBar('Success', 'green');
     } catch (e) {
-      console.error(e);
+      const errorMsg = getErrorMessage(e);
+      openSnackBar(errorMsg, 'red');
     } finally {
       loading.value = false;
+      removeDialog.value = false;
     }
   }
 
-  const onSelectItem = (id) => {
+  const onSelectItem = (expense) => {
     removeDialog.value = true;
-    selectedId.value = id;
+    Object.assign(selectedExpense, { val: expense });
   }
 
   const onCancel = () => {
     removeDialog.value = false;
-    selectedId.value = null;
+    Object.assign(selectedExpense, { val: null });
   }
 
   const onSave = async () => {
@@ -172,11 +188,13 @@
       loading.value = true;
       await Promise.all(promises);
       Object.assign(selected, { selectedExpenses: [] })
-      dialog.value = false;
+      openSnackBar('Success', 'green');
       await getUsersExpenses();
     } catch (e) {
-      console.error(e);
+      const errorMsg = getErrorMessage(e);
+      openSnackBar(errorMsg, 'red');
     } finally {
+      dialog.value = false;
       loading.value = false;
     }
   }
