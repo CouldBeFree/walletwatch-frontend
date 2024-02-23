@@ -2,7 +2,6 @@
   <h1>Expenses</h1>
   <v-row
     align="start"
-    no-gutters
   >
     <v-col lg="3">
       <UserExpenses />

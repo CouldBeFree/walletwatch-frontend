@@ -3,7 +3,13 @@
     prepend-icon="mdi-cash-multiple"
     title="My expenses"
   >
-    <template v-if="isUsersExpenses">
+    <template v-if="userExpensesLoading">
+      <v-skeleton-loader
+        class="mx-auto border"
+        type="heading, divider, list-item-three-line, divider, list-item-three-line, divider, button"
+      ></v-skeleton-loader>
+    </template>
+    <template v-if="isUsersExpenses && !userExpensesLoading">
       <v-table>
         <thead>
         <tr>
@@ -29,7 +35,7 @@
       </v-table>
     </template>
 
-    <template v-if="!isUsersExpenses" v-slot:text>
+    <template v-if="!isUsersExpenses && !userExpensesLoading" v-slot:text>
       You have not expenses yet
     </template>
 
@@ -144,6 +150,7 @@
   const loading = ref(false);
   const dialog = ref(false);
   const removeDialog = ref(false);
+  const userExpensesLoading = ref(false);
 
   let selectedIds = computed(() => selected.selectedExpenses.map(i => i.id));
   const isUsersExpenses = computed(() => userExpenses?.data.length);
@@ -201,12 +208,14 @@
 
   const getAllExpenses = async () => {
     const { data } = await ExpenseService.getAllExpenses();
-    Object.assign(allExpenses, data)
+    Object.assign(allExpenses, data);
   }
 
   const getUsersExpenses = async () => {
+    userExpensesLoading.value = true;
     const { data } = await ExpenseService.getUserExpenses();
     Object.assign(userExpenses, {data});
+    userExpensesLoading.value = false;
   }
 
   onMounted(async () => {
