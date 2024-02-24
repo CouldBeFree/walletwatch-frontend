@@ -42,6 +42,7 @@
 </template>
 
 <script setup>
+// TODO: refactor https://vuetifyjs.com/en/components/text-fields/#login-form
 import {computed, reactive, ref} from "vue";
 import {emailRules, passwordRules} from '@/settings/validationRules';
 import AuthService from "@/service/apiService/AuthService";

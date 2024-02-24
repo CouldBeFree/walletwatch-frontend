@@ -6,11 +6,15 @@
     <v-col lg="3">
       <UserExpenses />
     </v-col>
+    <v-col lg="3">
+      <TransactionExpenses />
+    </v-col>
   </v-row>
 </template>
 
 <script setup>
   import UserExpenses from "@/components/UserExpenses.vue";
+  import TransactionExpenses from "@/components/TransactionExpenses.vue";
 </script>
 
 <style scoped>

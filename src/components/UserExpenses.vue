@@ -9,7 +9,7 @@
         type="heading, divider, list-item-three-line, divider, list-item-three-line, divider, button"
       ></v-skeleton-loader>
     </template>
-    <template v-if="isUsersExpenses && !userExpensesLoading">
+    <template v-slot:text v-if="expensesFromStore.length && !userExpensesLoading">
       <v-table>
         <thead>
         <tr>
@@ -23,23 +23,19 @@
         </thead>
         <tbody>
           <tr
-            v-for="expense in userExpenses.data"
-            :key="expense.id"
+            v-for="item in expensesFromStore"
+            :key="item.id"
           >
-            <td>{{ expense.expenses_category_name }}</td>
+            <td>{{ item.expenses_category_name }}</td>
             <td class="text-right">
-              <v-btn icon="mdi-delete" @click="onSelectItem(expense)" color="red" size="x-small"></v-btn>
+              <v-btn icon="mdi-delete" @click="onSelectItem(item)" color="red" size="x-small"></v-btn>
             </td>
           </tr>
         </tbody>
       </v-table>
     </template>
 
-    <template v-if="!isUsersExpenses && !userExpensesLoading" v-slot:text>
-      You have not expenses yet
-    </template>
-
-    <v-card-actions class="pt-0" v-if="remainingExpenses.length">
+    <v-card-actions class="pt-0" v-if="remainingExpenses?.length">
       <v-btn
         variant="flat"
         color="primary"
@@ -135,16 +131,19 @@
 </template>
 
 <script setup>
+  import { storeToRefs } from "pinia";
   import {computed, ref} from "vue";
   import {onMounted, reactive} from "vue";
   import ExpenseService from "@/service/apiService/ExpenseService";
   import useSnackBar from "@/composable/useSnackBar";
   import getErrorMessage from "@/utils/getErrorMessage";
+  import { expensesStore } from "@/store/expenses";
 
   const { snackState, openSnackBar } = useSnackBar();
+  const store = expensesStore();
+  const { getUsersExpenses: expensesFromStore } = storeToRefs(store);
 
   let allExpenses = reactive([]);
-  const userExpenses = reactive({data: []});
   const selected = reactive({selectedExpenses: []});
   const selectedExpense = reactive({ val: null });
   const loading = ref(false);
@@ -153,11 +152,10 @@
   const userExpensesLoading = ref(false);
 
   let selectedIds = computed(() => selected.selectedExpenses.map(i => i.id));
-  const isUsersExpenses = computed(() => userExpenses?.data.length);
   const remainingExpenses = computed(() => {
-    const userExpenseNames = userExpenses.data.map(expense => expense.expenses_category_name);
+    const userExpenseNames = expensesFromStore.value.map(expense => expense.expenses_category_name);
     return allExpenses.filter(expense => !userExpenseNames.includes(expense.expenses_category_name));
-  })
+  });
 
   const onCancelExpense = () => {
     dialog.value = false
@@ -214,7 +212,7 @@
   const getUsersExpenses = async () => {
     userExpensesLoading.value = true;
     const { data } = await ExpenseService.getUserExpenses();
-    Object.assign(userExpenses, {data});
+    store.setUsersExpenses(data);
     userExpensesLoading.value = false;
   }
 

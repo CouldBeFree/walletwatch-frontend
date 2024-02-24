@@ -16,6 +16,10 @@ class ExpenseService {
   static addExpense(data) {
     return Gateway.post('/expenses', data)
   }
+
+  static createExpense(expense) {
+    return Gateway.post('/operation/expense', expense)
+  }
 }
 
 export default ExpenseService;

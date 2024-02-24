@@ -12,3 +12,7 @@ export const passwordRules = [
   (v) => !!v || 'Password is required',
   (v) => v.length > 4 || 'Password should be at least 4 characters long',
 ];
+
+export const amountRules = [
+  (v) => !!v || 'Amount is required'
+]
