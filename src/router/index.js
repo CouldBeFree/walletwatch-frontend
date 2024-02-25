@@ -10,7 +10,7 @@ const routes = [
   {
     path: '/dashboard',
     component: () => import('@/layouts/default/Default.vue'),
-    beforeEnter: (to, from, next) => localStorage.getItem(LOCAL_STORAGE_TOKEN_NAME) ? next() : next({name: 'auth'}),
+    beforeEnter: (to, from, next) => localStorage.getItem(LOCAL_STORAGE_TOKEN_NAME) ? next() : next({ name: 'Auth' }),
     name: 'Dashboard',
     children: [
       {
@@ -34,6 +34,7 @@ const routes = [
     path: '/auth',
     redirect: 'auth/login',
     component: () => import(/* webpackChunkName: "authLayout" */ '@/layouts/auth/AuthLayout.vue'),
+    name: 'Auth',
     beforeEnter: (to, from, next) => localStorage.getItem(LOCAL_STORAGE_TOKEN_NAME) ? next({name: 'Home'}) : next(),
     children: [
       {
