@@ -14,11 +14,15 @@ class ExpenseService {
   }
 
   static addExpense(data) {
-    return Gateway.post('/expenses', data)
+    return Gateway.post('/expenses', data);
   }
 
   static createExpense(expense) {
-    return Gateway.post('/operation/expense', expense)
+    return Gateway.post('/operation/expense', expense);
+  }
+
+  static getAllCreatedExpenses() {
+    return Gateway.get('/operation/expense');
   }
 }
 

@@ -6,7 +6,7 @@
     <v-col lg="3">
       <UserExpenses />
     </v-col>
-    <v-col lg="3">
+    <v-col lg="5">
       <TransactionExpenses />
     </v-col>
   </v-row>
