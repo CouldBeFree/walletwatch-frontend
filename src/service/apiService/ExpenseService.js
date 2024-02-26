@@ -28,6 +28,10 @@ class ExpenseService {
   static getAllCreatedExpenses() {
     return Gateway.get('/operation/expense');
   }
+
+  static deleteExpense(id) {
+    return Gateway.delete(`/operation/expense/${id}`);
+  }
 }
 
 export default ExpenseService;

@@ -80,14 +80,13 @@
             </v-form>
           </v-card>
         </v-dialog>
-        <v-dialog v-model="dialogDelete" max-width="500px">
+        <v-dialog v-model="dialogDelete" scrollable max-width="500px" width="400">
           <v-card>
-            <v-card-title class="text-h5">Are you sure you want to delete this item?</v-card-title>
+            <v-card-title class="text-h5">Remove {{expense.expenses_category_name}}?</v-card-title>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn color="blue-darken-1" variant="text" @click="closeDelete">Cancel</v-btn>
-              <v-btn color="blue-darken-1" variant="text" @click="deleteItemConfirm">OK</v-btn>
-              <v-spacer></v-spacer>
+              <v-btn color="blue-darken-1" variant="flat" @click="closeDelete">Cancel</v-btn>
+              <v-btn color="blue-darken-1" variant="flat" @click="deleteItemConfirm" :loading="loading">Remove</v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
@@ -119,7 +118,7 @@
 </template>
 
 <script setup>
-import {ref, reactive, watch, onMounted, computed} from "vue";
+ import { ref, reactive, watch, onMounted, computed } from "vue";
   import { amountRules } from '@/settings/validationRules';
   import { expensesStore } from "@/store/expenses";
   import {storeToRefs} from "pinia";
@@ -161,14 +160,39 @@ import {ref, reactive, watch, onMounted, computed} from "vue";
     }
   });
 
+  watch(dialogDelete, (val) => {
+    if (!val) {
+      Object.assign(expense, { ...initialExpenseState })
+    }
+  });
+
   const editItem = (item) => {
     const id = getUsersExpenses.value.find((el) => el.expenses_category_name === item.expenses_category_name)?.id;
     Object.assign(expense, { ...item, expense_category_id: id });
     addExpense.value = true;
   }
-  const closeDelete = (item) => console.log(item);
-  const deleteItemConfirm = (item) => console.log(item);
-  const deleteItem = (item) => console.log(item);
+
+  const closeDelete = () => {
+    dialogDelete.value = false;
+  }
+
+  const deleteItemConfirm = async () => {
+    try {
+      await ExpenseService.deleteExpense(expense.id);
+      await getAllCreatedExpenses();
+      openSnackBar('Success', 'green');
+    } catch (e) {
+      const errorMsg = getErrorMessage(e);
+      openSnackBar(errorMsg, 'red');
+    } finally {
+      dialogDelete.value = false;
+    }
+  }
+
+  const deleteItem = (item) => {
+    dialogDelete.value = true;
+    Object.assign(expense, { ...item });
+  }
 
   const editedCategoryName = computed(() => {
     return getUsersExpenses.value.find((el) => el.id === expense.expense_category_id)?.expenses_category_name;
