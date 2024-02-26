@@ -21,6 +21,10 @@ class ExpenseService {
     return Gateway.post('/operation/expense', expense);
   }
 
+  static updateExpense(expense, id) {
+    return Gateway.put(`/operation/expense/${id}`, expense);
+  }
+
   static getAllCreatedExpenses() {
     return Gateway.get('/operation/expense');
   }

@@ -30,7 +30,7 @@
             </v-btn>
           </template>
           <v-card>
-            <v-card-title>Add transaction</v-card-title>
+            <v-card-title>{{ expense.id ? 'Edit' : 'Create' }}</v-card-title>
             <v-form @submit.prevent ref="form" v-model="valid" lazy-validation>
               <v-card-item>
                 <v-text-field
@@ -80,7 +80,6 @@
             </v-form>
           </v-card>
         </v-dialog>
-        <!--        -->
         <v-dialog v-model="dialogDelete" max-width="500px">
           <v-card>
             <v-card-title class="text-h5">Are you sure you want to delete this item?</v-card-title>
@@ -120,7 +119,7 @@
 </template>
 
 <script setup>
-  import {ref, reactive, watch, onMounted} from "vue";
+import {ref, reactive, watch, onMounted, computed} from "vue";
   import { amountRules } from '@/settings/validationRules';
   import { expensesStore } from "@/store/expenses";
   import {storeToRefs} from "pinia";
@@ -130,6 +129,7 @@
   import getErrorMessage from "@/utils/getErrorMessage";
 
   const initialExpenseState = {
+    id: null,
     amount: null,
     date: null,
     expense_category_id: null,
@@ -146,9 +146,6 @@
   const addExpense = ref(false);
   const isLoadingExpenses = ref(false);
   const dialogDelete = ref(false);
-  const formTitle = ref('');
-  const selectedDate = ref('');
-  const formattedDate = ref('');
   const expense = reactive({ ...initialExpenseState });
   const userExpenses = reactive({ value: [] });
   const headers = [
@@ -172,14 +169,16 @@
   const closeDelete = (item) => console.log(item);
   const deleteItemConfirm = (item) => console.log(item);
   const deleteItem = (item) => console.log(item);
-  const close = (item) => console.log(item);
-  const save = (item) => console.log(item);
+
+  const editedCategoryName = computed(() => {
+    return getUsersExpenses.value.find((el) => el.id === expense.expense_category_id)?.expenses_category_name;
+  });
 
   const onSubmit = async () => {
     if (!valid.value) return;
     loading.value = true;
     try {
-      await ExpenseService.createExpense(expense);
+      expense.id ? await ExpenseService.updateExpense({ ...expense, expenses_category_name: editedCategoryName.value }, expense.id) : await ExpenseService.createExpense(expense);
       await getAllCreatedExpenses();
       openSnackBar('Success', 'green');
     } catch (e) {
@@ -188,6 +187,7 @@
     } finally {
       addExpense.value = false;
       loading.value = false;
+      Object.assign(expense, { ...initialExpenseState });
     }
   }
 
@@ -196,7 +196,6 @@
     const { data } = await ExpenseService.getAllCreatedExpenses();
     Object.assign(userExpenses, { value: data })
     isLoadingExpenses.value = false;
-    console.log(data);
   }
 
   onMounted(async () => {
