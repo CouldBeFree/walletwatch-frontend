@@ -32,6 +32,15 @@ class ExpenseService {
   static deleteExpense(id) {
     return Gateway.delete(`/operation/expense/${id}`);
   }
+
+  static getStatisticByDate() {
+    return Gateway.get('/expenses/user/statistic', {
+      params: {
+        startDate: '2014-01-01',
+        endDate: '2024-02-21'
+      }
+    })
+  }
 }
 
 export default ExpenseService;
