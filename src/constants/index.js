@@ -5,4 +5,4 @@ export const TEXT_TYPE = "text";
 export const PASSWORD_TYPE = "password";
 export const DARK_THEME = "dark";
 export const LIGHT_THEME = "light";
-export const THEME_KEY = "theme";
+export const FIRE_SNACK = "fire_snack";

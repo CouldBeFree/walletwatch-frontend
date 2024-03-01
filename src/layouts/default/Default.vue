@@ -54,14 +54,24 @@
       </v-container>
     </v-main>
   </v-layout>
+  <v-snackbar
+    v-model="snackState.isOpen"
+    :timeout="4000"
+    :color="snackState.type"
+  >
+    {{ snackState.text }}
+  </v-snackbar>
 </template>
 
 <script setup>
 import { useTheme } from "vuetify";
-import { LOCAL_STORAGE_TOKEN_NAME, LIGHT_THEME, DARK_THEME } from "@/constants";
+import { LOCAL_STORAGE_TOKEN_NAME, LIGHT_THEME, DARK_THEME, FIRE_SNACK } from "@/constants";
 import AuthService from "@/service/apiService/AuthService";
 import router from "@/router";
-import { onMounted, reactive } from "vue";
+import {onMounted, onUnmounted, reactive} from "vue";
+import proxy from "@/utils/proxy";
+import useSnackBar from "@/composable/useSnackBar";
+const { snackState, openSnackBar } = useSnackBar();
 
 const theme = useTheme();
 
@@ -81,7 +91,12 @@ let user = reactive({
   username: null,
 });
 
+onUnmounted(() => {
+  proxy.unsubscribe(FIRE_SNACK);
+});
+
 onMounted(async () => {
+  proxy.subscribe(FIRE_SNACK, (val) => openSnackBar(val.text, val.type));
   try {
     const { data } = await AuthService.getUser();
     user = {

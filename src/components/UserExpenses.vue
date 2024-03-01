@@ -1,14 +1,14 @@
 <template>
   <v-card prepend-icon="mdi-cash-multiple" title="My expenses">
-    <template v-if="userExpensesLoading">
-      <v-skeleton-loader
-        class="mx-auto border"
-        type="heading, divider, list-item-three-line, divider, list-item-three-line, divider, button"
-      ></v-skeleton-loader>
-    </template>
+<!--    <template v-if="userExpensesLoading">-->
+<!--      <v-skeleton-loader-->
+<!--        class="mx-auto border"-->
+<!--        type="heading, divider, list-item-three-line, divider, list-item-three-line, divider, button"-->
+<!--      ></v-skeleton-loader>-->
+<!--    </template>-->
     <template
       v-slot:text
-      v-if="expensesFromStore.length && !userExpensesLoading"
+      v-if="userData.length"
     >
       <v-table>
         <thead>
@@ -18,7 +18,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="item in expensesFromStore" :key="item.id">
+          <tr v-for="item in userData" :key="item.id">
             <td>{{ item.expenses_category_name }}</td>
             <td class="text-right">
               <v-btn
@@ -101,42 +101,26 @@
       </v-card-actions>
     </v-card>
   </v-dialog>
-  <v-snackbar
-    v-model="snackState.isOpen"
-    :timeout="4000"
-    :color="snackState.type"
-  >
-    {{ snackState.text }}
-  </v-snackbar>
 </template>
 
 <script setup>
-import { storeToRefs } from "pinia";
 import { computed, ref } from "vue";
-import { onMounted, reactive } from "vue";
-import ExpenseService from "@/service/apiService/ExpenseService";
-import useSnackBar from "@/composable/useSnackBar";
-import getErrorMessage from "@/utils/getErrorMessage";
-import { expensesStore } from "@/store/expenses";
+import { reactive } from "vue";
 
-const { snackState, openSnackBar } = useSnackBar();
-const store = expensesStore();
-const { getUsersExpenses: expensesFromStore } = storeToRefs(store);
+const props = defineProps(['data', 'userData', 'loading']);
+const emit = defineEmits(['delete', 'create']);
 
-let allExpenses = reactive([]);
 const selected = reactive({ selectedExpenses: [] });
 const selectedExpense = reactive({ val: null });
-const loading = ref(false);
 const dialog = ref(false);
 const removeDialog = ref(false);
-const userExpensesLoading = ref(false);
 
 let selectedIds = computed(() => selected.selectedExpenses.map((i) => i.id));
 const remainingExpenses = computed(() => {
-  const userExpenseNames = expensesFromStore.value.map(
+  const userExpenseNames = props.userData.map(
     (expense) => expense.expenses_category_name,
   );
-  return allExpenses.filter(
+  return props.data.filter(
     (expense) => !userExpenseNames.includes(expense.expenses_category_name),
   );
 });
@@ -147,18 +131,8 @@ const onCancelExpense = () => {
 };
 
 const onRemove = async () => {
-  try {
-    loading.value = true;
-    await ExpenseService.removeExpense(selectedExpense.val.id);
-    await getUsersExpenses();
-    openSnackBar("Success", "green");
-  } catch (e) {
-    const errorMsg = getErrorMessage(e);
-    openSnackBar(errorMsg, "red");
-  } finally {
-    loading.value = false;
-    removeDialog.value = false;
-  }
+  emit('delete', selectedExpense.val.id);
+  removeDialog.value = false;
 };
 
 const onSelectItem = (expense) => {
@@ -172,40 +146,9 @@ const onCancel = () => {
 };
 
 const onSave = async () => {
-  const promises = selectedIds.value.map((id) =>
-    ExpenseService.addExpense({ expense_id: id }),
-  );
-  try {
-    loading.value = true;
-    await Promise.all(promises);
-    Object.assign(selected, { selectedExpenses: [] });
-    openSnackBar("Success", "green");
-    await getUsersExpenses();
-  } catch (e) {
-    const errorMsg = getErrorMessage(e);
-    openSnackBar(errorMsg, "red");
-  } finally {
-    dialog.value = false;
-    loading.value = false;
-  }
+  emit('create', selectedIds.value);
+  dialog.value = false;
 };
-
-const getAllExpenses = async () => {
-  const { data } = await ExpenseService.getAllExpenses();
-  Object.assign(allExpenses, data);
-};
-
-const getUsersExpenses = async () => {
-  userExpensesLoading.value = true;
-  const { data } = await ExpenseService.getUserExpenses();
-  store.setUsersExpenses(data);
-  userExpensesLoading.value = false;
-};
-
-onMounted(async () => {
-  await getAllExpenses();
-  await getUsersExpenses();
-});
 
 const onOpenModal = () => {
   dialog.value = true;
