@@ -5,10 +5,14 @@
         <v-row>
           <v-col
             xs="12"
-            sm="6" offset-sm="3"
-            md="6" offset-md="3"
-            lg="4" offset-lg="4"
-            xl="2" offset-xl="5"
+            sm="6"
+            offset-sm="3"
+            md="6"
+            offset-md="3"
+            lg="4"
+            offset-lg="4"
+            xl="2"
+            offset-xl="5"
           >
             <router-view />
           </v-col>
@@ -16,12 +20,8 @@
       </v-container>
     </v-main>
   </v-app>
-
 </template>
 
-<script setup>
-</script>
+<script setup></script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

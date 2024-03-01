@@ -2,11 +2,11 @@ import { Gateway } from "@/settings/axios";
 
 class ExpenseService {
   static getAllExpenses() {
-    return Gateway.get('/expenses');
+    return Gateway.get("/expenses");
   }
 
   static getUserExpenses() {
-    return Gateway.get('/expenses/mine');
+    return Gateway.get("/expenses/mine");
   }
 
   static removeExpense(id) {
@@ -14,11 +14,11 @@ class ExpenseService {
   }
 
   static addExpense(data) {
-    return Gateway.post('/expenses', data);
+    return Gateway.post("/expenses", data);
   }
 
   static createExpense(expense) {
-    return Gateway.post('/operation/expense', expense);
+    return Gateway.post("/operation/expense", expense);
   }
 
   static updateExpense(expense, id) {
@@ -26,7 +26,7 @@ class ExpenseService {
   }
 
   static getAllCreatedExpenses() {
-    return Gateway.get('/operation/expense');
+    return Gateway.get("/operation/expense");
   }
 
   static deleteExpense(id) {
@@ -34,12 +34,12 @@ class ExpenseService {
   }
 
   static getStatisticByDate() {
-    return Gateway.get('/expenses/user/statistic', {
+    return Gateway.get("/expenses/user/statistic", {
       params: {
-        startDate: '2014-01-01',
-        endDate: '2024-02-21'
-      }
-    })
+        startDate: "2014-01-01",
+        endDate: "2024-02-21",
+      },
+    });
   }
 }
 

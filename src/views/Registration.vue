@@ -1,10 +1,5 @@
 <template>
-  <v-form
-    ref="form"
-    v-model="valid"
-    lazy-validation
-    @submit.prevent
-  >
+  <v-form ref="form" v-model="valid" lazy-validation @submit.prevent>
     <v-text-field
       v-model="user.username"
       :rules="nameValidation"
@@ -41,24 +36,29 @@
         <router-link to="/auth/login">I already have account</router-link>
       </p>
     </div>
-    <v-alert v-if="error" class="mt-5" type="error">{{error}}</v-alert>
+    <v-alert v-if="error" class="mt-5" type="error">{{ error }}</v-alert>
     <v-alert v-if="success" class="mt-5" type="success">
-      You have been successfully registered. No you can <router-link to="/auth/login">Login</router-link>
+      You have been successfully registered. No you can
+      <router-link to="/auth/login">Login</router-link>
     </v-alert>
   </v-form>
 </template>
 
 <script setup>
-import {reactive, ref} from "vue";
+import { reactive, ref } from "vue";
 import AuthService from "@/service/apiService/AuthService";
-import {emailRules, nameRules, passwordRules} from '@/settings/validationRules';
+import {
+  emailRules,
+  nameRules,
+  passwordRules,
+} from "@/settings/validationRules";
 import getErrorMessage from "@/utils/getErrorMessage";
-import useFormStatusHandler from '@/composable/useFormStatusHandler';
+import useFormStatusHandler from "@/composable/useFormStatusHandler";
 
 const user = reactive({
-  email: '',
-  password: '',
-  username: ''
+  email: "",
+  password: "",
+  username: "",
 });
 
 const { loading, error, valid, success } = useFormStatusHandler();
@@ -83,11 +83,7 @@ const submit = async () => {
   } finally {
     loading.value = false;
   }
-}
-
+};
 </script>
 
-
-<style scoped>
-
-</style>
+<style scoped></style>

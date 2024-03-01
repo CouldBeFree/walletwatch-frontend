@@ -1,59 +1,75 @@
-import { createRouter, createWebHistory } from 'vue-router'
-import {LOCAL_STORAGE_TOKEN_NAME} from "@/constants";
+import { createRouter, createWebHistory } from "vue-router";
+import { LOCAL_STORAGE_TOKEN_NAME } from "@/constants";
 
 const routes = [
   {
-    path: '/',
-    redirect: 'auth',
-    name: 'root'
+    path: "/",
+    redirect: "auth",
+    name: "root",
   },
   {
-    path: '/dashboard',
-    component: () => import('@/layouts/default/Default.vue'),
-    beforeEnter: (to, from, next) => localStorage.getItem(LOCAL_STORAGE_TOKEN_NAME) ? next() : next({ name: 'Auth' }),
-    name: 'Dashboard',
+    path: "/dashboard",
+    component: () => import("@/layouts/default/Default.vue"),
+    beforeEnter: (to, from, next) =>
+      localStorage.getItem(LOCAL_STORAGE_TOKEN_NAME)
+        ? next()
+        : next({ name: "Auth" }),
+    name: "Dashboard",
     children: [
       {
-        path: '',
-        name: 'Home',
-        component: () => import(/* webpackChunkName: "home" */ '@/views/Home.vue'),
+        path: "",
+        name: "Home",
+        component: () =>
+          import(/* webpackChunkName: "home" */ "@/views/Home.vue"),
       },
       {
-        path: 'incomes',
-        name: 'Incomes',
-        component: () => import(/* webpackChunkName: "incomes" */ '@/views/Incomes.vue')
+        path: "incomes",
+        name: "Incomes",
+        component: () =>
+          import(/* webpackChunkName: "incomes" */ "@/views/Incomes.vue"),
       },
       {
-        path: 'expenses',
-        name: 'Expenses',
-        component: () => import(/* webpackChunkName: "expenses" */ '@/views/Expenses.vue')
-      }
-    ]
-  },
-  {
-    path: '/auth',
-    redirect: 'auth/login',
-    component: () => import(/* webpackChunkName: "authLayout" */ '@/layouts/auth/AuthLayout.vue'),
-    name: 'Auth',
-    beforeEnter: (to, from, next) => localStorage.getItem(LOCAL_STORAGE_TOKEN_NAME) ? next({name: 'Home'}) : next(),
-    children: [
-      {
-        path: 'registration',
-        name: 'Registration',
-        component: () => import(/* webpackChunkName: "registration" */ '@/views/Registration.vue'),
-      },
-      {
-        path: 'login',
-        name: 'Login',
-        component: () => import(/* webpackChunkName: "login" */ '@/views/Login.vue'),
+        path: "expenses",
+        name: "Expenses",
+        component: () =>
+          import(/* webpackChunkName: "expenses" */ "@/views/Expenses.vue"),
       },
     ],
-  }
-]
+  },
+  {
+    path: "/auth",
+    redirect: "auth/login",
+    component: () =>
+      import(
+        /* webpackChunkName: "authLayout" */ "@/layouts/auth/AuthLayout.vue"
+      ),
+    name: "Auth",
+    beforeEnter: (to, from, next) =>
+      localStorage.getItem(LOCAL_STORAGE_TOKEN_NAME)
+        ? next({ name: "Home" })
+        : next(),
+    children: [
+      {
+        path: "registration",
+        name: "Registration",
+        component: () =>
+          import(
+            /* webpackChunkName: "registration" */ "@/views/Registration.vue"
+          ),
+      },
+      {
+        path: "login",
+        name: "Login",
+        component: () =>
+          import(/* webpackChunkName: "login" */ "@/views/Login.vue"),
+      },
+    ],
+  },
+];
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
-})
+});
 
-export default router
+export default router;

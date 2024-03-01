@@ -1,18 +1,18 @@
 // Utilities
-import { defineStore } from 'pinia';
+import { defineStore } from "pinia";
 
-export const expensesStore = defineStore('expenses', {
+export const expensesStore = defineStore("expenses", {
   state: () => ({
-    usersExpenses: []
+    usersExpenses: [],
   }),
   getters: {
     getUsersExpenses: (state) => {
-      return state.usersExpenses
-    }
+      return state.usersExpenses;
+    },
   },
   actions: {
     setUsersExpenses(expenses) {
       this.usersExpenses = expenses;
-    }
-  }
+    },
+  },
 });

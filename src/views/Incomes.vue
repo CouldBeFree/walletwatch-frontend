@@ -2,10 +2,6 @@
   <h1>Incomes</h1>
 </template>
 
-<script setup>
+<script setup></script>
 
-</script>
-
-<style scoped>
-
-</style>
+<style scoped></style>

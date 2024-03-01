@@ -1,4 +1,4 @@
-import {ref} from "vue";
+import { ref } from "vue";
 
 export default function useFormStatusHandler() {
   const error = ref(null);
@@ -6,5 +6,5 @@ export default function useFormStatusHandler() {
   const valid = ref(false);
   const loading = ref(false);
 
-  return { error, success, valid, loading }
+  return { error, success, valid, loading };
 }
