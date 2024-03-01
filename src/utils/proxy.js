@@ -13,16 +13,16 @@ class Proxy {
       },
       unsubscribe(evName, fn) {
         if (events[evName]) {
-          events[evName] = events[evName].filter(f => f !== fn);
+          events[evName] = events[evName].filter((f) => f !== fn);
         }
       },
       publish(evName, data) {
         if (events[evName]) {
-          events[evName].forEach(f => {
+          events[evName].forEach((f) => {
             f(data);
           });
         }
-      }
+      },
     };
   }
 
@@ -34,6 +34,6 @@ class Proxy {
   }
 }
 
-const proxy= new Proxy();
+const proxy = new Proxy();
 
 export default proxy.init();

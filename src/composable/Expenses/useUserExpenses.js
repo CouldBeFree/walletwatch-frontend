@@ -1,8 +1,8 @@
-import {onMounted, ref} from "vue";
-import {expensesStore} from "@/store/expenses";
-import {storeToRefs} from "pinia";
+import { onMounted, ref } from "vue";
+import { expensesStore } from "@/store/expenses";
+import { storeToRefs } from "pinia";
 import proxy from "@/utils/proxy";
-import {FIRE_SNACK} from "@/constants";
+import { FIRE_SNACK } from "@/constants";
 import getErrorMessage from "@/utils/getErrorMessage";
 
 export default function useUserExpenses() {
@@ -23,14 +23,14 @@ export default function useUserExpenses() {
     try {
       await store.removeCategoryExpense(id);
       await store.getUsersExpensesFromApi();
-      proxy.publish(FIRE_SNACK, { type: 'green', text: 'Success' });
+      proxy.publish(FIRE_SNACK, { type: "green", text: "Success" });
     } catch (e) {
       const errorMsg = getErrorMessage(e);
-      proxy.publish(FIRE_SNACK, { type: 'red', text: errorMsg });
+      proxy.publish(FIRE_SNACK, { type: "red", text: errorMsg });
     } finally {
       loading.value = false;
     }
-  }
+  };
 
   const onCreateExpense = async (ids) => {
     const promises = ids.map((id) => store.createExpense(id));
@@ -38,14 +38,20 @@ export default function useUserExpenses() {
     try {
       await Promise.all(promises);
       await store.getUsersExpensesFromApi();
-      proxy.publish(FIRE_SNACK, { type: 'green', text: 'Success' });
+      proxy.publish(FIRE_SNACK, { type: "green", text: "Success" });
     } catch (e) {
       const errorMsg = getErrorMessage(e);
-      proxy.publish(FIRE_SNACK, { type: 'red', text: errorMsg });
+      proxy.publish(FIRE_SNACK, { type: "red", text: errorMsg });
     } finally {
       loading.value = false;
     }
-  }
+  };
 
-  return { getUsersExpenses, getAllExpenses, onCreateExpense, onDeleteExpense, loading }
+  return {
+    getUsersExpenses,
+    getAllExpenses,
+    onCreateExpense,
+    onDeleteExpense,
+    loading,
+  };
 }

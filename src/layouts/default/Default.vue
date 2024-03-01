@@ -65,10 +65,15 @@
 
 <script setup>
 import { useTheme } from "vuetify";
-import { LOCAL_STORAGE_TOKEN_NAME, LIGHT_THEME, DARK_THEME, FIRE_SNACK } from "@/constants";
+import {
+  LOCAL_STORAGE_TOKEN_NAME,
+  LIGHT_THEME,
+  DARK_THEME,
+  FIRE_SNACK,
+} from "@/constants";
 import AuthService from "@/service/apiService/AuthService";
 import router from "@/router";
-import {onMounted, onUnmounted, reactive} from "vue";
+import { onMounted, onUnmounted, reactive } from "vue";
 import proxy from "@/utils/proxy";
 import useSnackBar from "@/composable/useSnackBar";
 const { snackState, openSnackBar } = useSnackBar();

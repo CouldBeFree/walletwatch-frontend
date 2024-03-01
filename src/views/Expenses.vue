@@ -25,8 +25,13 @@ import UserExpenses from "@/components/UserExpenses.vue";
 import TransactionExpenses from "@/components/TransactionExpenses.vue";
 import useUserExpenses from "@/composable/Expenses/useUserExpenses";
 
-const { getAllExpenses, getUsersExpenses, loading: expenseLoading, onDeleteExpense, onCreateExpense } = useUserExpenses();
-
+const {
+  getAllExpenses,
+  getUsersExpenses,
+  loading: expenseLoading,
+  onDeleteExpense,
+  onCreateExpense,
+} = useUserExpenses();
 </script>
 
 <style scoped></style>

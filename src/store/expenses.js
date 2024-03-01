@@ -4,7 +4,7 @@ import ExpenseService from "@/service/apiService/ExpenseService";
 export const expensesStore = defineStore("expenses", {
   state: () => ({
     usersExpenses: [],
-    allExpenses: []
+    allExpenses: [],
   }),
   getters: {
     getUsersExpenses: (state) => {
@@ -12,7 +12,7 @@ export const expensesStore = defineStore("expenses", {
     },
     getAllExpenses: (state) => {
       return state.allExpenses;
-    }
+    },
   },
   actions: {
     setUsersExpenses(expenses) {
@@ -39,6 +39,6 @@ export const expensesStore = defineStore("expenses", {
       } catch (e) {
         throw new Error(e);
       }
-    }
+    },
   },
 });

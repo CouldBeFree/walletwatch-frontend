@@ -1,15 +1,12 @@
 <template>
   <v-card prepend-icon="mdi-cash-multiple" title="My expenses">
-<!--    <template v-if="userExpensesLoading">-->
-<!--      <v-skeleton-loader-->
-<!--        class="mx-auto border"-->
-<!--        type="heading, divider, list-item-three-line, divider, list-item-three-line, divider, button"-->
-<!--      ></v-skeleton-loader>-->
-<!--    </template>-->
-    <template
-      v-slot:text
-      v-if="userData.length"
-    >
+    <template v-if="loading">
+      <v-skeleton-loader
+        class="mx-auto border"
+        type="heading, divider, list-item-three-line, divider, list-item-three-line, divider, button"
+      ></v-skeleton-loader>
+    </template>
+    <template v-slot:text v-if="userData.length">
       <v-table>
         <thead>
           <tr>
@@ -107,8 +104,8 @@
 import { computed, ref } from "vue";
 import { reactive } from "vue";
 
-const props = defineProps(['data', 'userData', 'loading']);
-const emit = defineEmits(['delete', 'create']);
+const props = defineProps(["data", "userData", "loading"]);
+const emit = defineEmits(["delete", "create"]);
 
 const selected = reactive({ selectedExpenses: [] });
 const selectedExpense = reactive({ val: null });
@@ -131,7 +128,7 @@ const onCancelExpense = () => {
 };
 
 const onRemove = async () => {
-  emit('delete', selectedExpense.val.id);
+  emit("delete", selectedExpense.val.id);
   removeDialog.value = false;
 };
 
@@ -146,7 +143,7 @@ const onCancel = () => {
 };
 
 const onSave = async () => {
-  emit('create', selectedIds.value);
+  emit("create", selectedIds.value);
   dialog.value = false;
 };
 
