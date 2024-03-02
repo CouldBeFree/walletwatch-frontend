@@ -11,7 +11,19 @@
       />
     </v-col>
     <v-col xs="12" sm="12" md="7" lg="5">
-      <TransactionExpenses />
+      <ul>
+        <li v-for="item in getUsersExpenses" :key="item.id">{{item}}</li>
+      </ul>
+      <hr>
+      <ul>
+        <li v-for="item in getUsersTransactions" :key="item.id">{{item}}</li>
+      </ul>
+      <TransactionExpenses
+        :data="getUsersTransactions"
+        :userData="getUsersExpenses"
+        @update="onUpdate"
+        @create="onCreate"
+      />
     </v-col>
     <v-col xs="12" sm="12" md="6" lg="4">
       <ExpenseChartStatistic />
@@ -24,6 +36,7 @@ import ExpenseChartStatistic from "@/components/ExpenseChartStatistic.vue";
 import UserExpenses from "@/components/UserExpenses.vue";
 import TransactionExpenses from "@/components/TransactionExpenses.vue";
 import useUserExpenses from "@/composable/Expenses/useUserExpenses";
+import useTransactionExpenses from "@/composable/Expenses/useTransactionExpenses";
 
 const {
   getAllExpenses,
@@ -32,6 +45,8 @@ const {
   onDeleteExpense,
   onCreateExpense,
 } = useUserExpenses();
+
+const { getUsersTransactions, onUpdate, onCreate } = useTransactionExpenses();
 </script>
 
 <style scoped></style>

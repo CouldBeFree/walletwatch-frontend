@@ -37,7 +37,7 @@ class ExpenseService {
     return Gateway.get("/expenses/user/statistic", {
       params: {
         startDate: "2014-01-01",
-        endDate: "2024-02-21",
+        endDate: "2024-03-01",
       },
     });
   }

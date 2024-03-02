@@ -5,6 +5,7 @@ export const expensesStore = defineStore("expenses", {
   state: () => ({
     usersExpenses: [],
     allExpenses: [],
+    usersTransactions: []
   }),
   getters: {
     getUsersExpenses: (state) => {
@@ -13,6 +14,9 @@ export const expensesStore = defineStore("expenses", {
     getAllExpenses: (state) => {
       return state.allExpenses;
     },
+    getUsersTransactions(state) {
+      return state.usersTransactions;
+    }
   },
   actions: {
     setUsersExpenses(expenses) {
@@ -40,5 +44,16 @@ export const expensesStore = defineStore("expenses", {
         throw new Error(e);
       }
     },
+    async getUserTransactions() {
+      const { data } = await ExpenseService.getAllCreatedExpenses();
+      this.usersTransactions = data;
+    },
+    async createUserTransaction(expense) {
+      try {
+        await ExpenseService.createExpense(expense);
+      } catch (e) {
+        throw new Error(e);
+      }
+    }
   },
 });

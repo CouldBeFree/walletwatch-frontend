@@ -1,6 +1,6 @@
 <template>
   <v-data-table
-    :items="userExpenses.value"
+    :items="data"
     :headers="headers"
     :loading="isLoadingExpenses"
   >
@@ -100,24 +100,19 @@
       <v-icon size="small" @click="deleteItem(item)"> mdi-delete </v-icon>
     </template>
   </v-data-table>
-  <v-snackbar
-    v-model="snackState.isOpen"
-    :timeout="4000"
-    :color="snackState.type"
-  >
-    {{ snackState.text }}
-  </v-snackbar>
 </template>
 
 <script setup>
-import { ref, reactive, watch, onMounted, computed } from "vue";
+import {ref, reactive, watch, computed} from "vue";
 import { amountRules } from "@/settings/validationRules";
 import { expensesStore } from "@/store/expenses";
 import { storeToRefs } from "pinia";
 import useFormStatusHandler from "@/composable/useFormStatusHandler";
 import ExpenseService from "@/service/apiService/ExpenseService";
-import useSnackBar from "@/composable/useSnackBar";
 import getErrorMessage from "@/utils/getErrorMessage";
+
+const props = defineProps(["data", "userData"]);
+const emit = defineEmits(["delete", "create"]);
 
 const initialExpenseState = {
   id: null,
@@ -129,7 +124,6 @@ const initialExpenseState = {
 
 const store = expensesStore();
 
-const { snackState, openSnackBar } = useSnackBar();
 const { getUsersExpenses } = storeToRefs(store);
 const { valid, loading } = useFormStatusHandler();
 
@@ -138,7 +132,6 @@ const addExpense = ref(false);
 const isLoadingExpenses = ref(false);
 const dialogDelete = ref(false);
 const expense = reactive({ ...initialExpenseState });
-const userExpenses = reactive({ value: [] });
 const headers = [
   { title: "Expense name", value: "expenses_category_name", sortable: true },
   { title: "Amount", value: "amount", sortable: true },
@@ -159,7 +152,7 @@ watch(dialogDelete, (val) => {
 });
 
 const editItem = (item) => {
-  const id = getUsersExpenses.value.find(
+  const id = props.userData.find(
     (el) => el.expenses_category_name === item.expenses_category_name,
   )?.id;
   Object.assign(expense, { ...item, expense_category_id: id });
@@ -173,11 +166,8 @@ const closeDelete = () => {
 const deleteItemConfirm = async () => {
   try {
     await ExpenseService.deleteExpense(expense.id);
-    await getAllCreatedExpenses();
-    openSnackBar("Success", "green");
   } catch (e) {
     const errorMsg = getErrorMessage(e);
-    openSnackBar(errorMsg, "red");
   } finally {
     dialogDelete.value = false;
   }
@@ -189,43 +179,32 @@ const deleteItem = (item) => {
 };
 
 const editedCategoryName = computed(() => {
-  return getUsersExpenses.value.find(
+  return props.userData.find(
     (el) => el.id === expense.expense_category_id,
   )?.expenses_category_name;
 });
 
 const onSubmit = async () => {
   if (!valid.value) return;
-  loading.value = true;
-  try {
-    expense.id
-      ? await ExpenseService.updateExpense(
-          { ...expense, expenses_category_name: editedCategoryName.value },
-          expense.id,
-        )
-      : await ExpenseService.createExpense(expense);
-    await getAllCreatedExpenses();
-    openSnackBar("Success", "green");
-  } catch (e) {
-    const errorMsg = getErrorMessage(e);
-    openSnackBar(errorMsg, "red");
-  } finally {
-    addExpense.value = false;
-    loading.value = false;
-    Object.assign(expense, { ...initialExpenseState });
-  }
+  expense.id ? emit('update', { ...expense, expenses_category_name: editedCategoryName.value, id: expense.id }) : emit('create', expense);
+  Object.assign(expense, { ...initialExpenseState });
+  addExpense.value = false;
+  // loading.value = true;
+  // try {
+  //   expense.id
+  //     ? await ExpenseService.updateExpense(
+  //         { ...expense, expenses_category_name: editedCategoryName.value },
+  //         expense.id,
+  //       )
+  //     : await ExpenseService.createExpense(expense);
+  // } catch (e) {
+  //   const errorMsg = getErrorMessage(e);
+  // } finally {
+  //   addExpense.value = false;
+  //   loading.value = false;
+  //   Object.assign(expense, { ...initialExpenseState });
+  // }
 };
-
-const getAllCreatedExpenses = async () => {
-  isLoadingExpenses.value = true;
-  const { data } = await ExpenseService.getAllCreatedExpenses();
-  Object.assign(userExpenses, { value: data });
-  isLoadingExpenses.value = false;
-};
-
-onMounted(async () => {
-  await getAllCreatedExpenses();
-});
 </script>
 
 <style scoped></style>
