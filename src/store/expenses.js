@@ -5,7 +5,7 @@ export const expensesStore = defineStore("expenses", {
   state: () => ({
     usersExpenses: [],
     allExpenses: [],
-    usersTransactions: []
+    usersTransactions: [],
   }),
   getters: {
     getUsersExpenses: (state) => {
@@ -16,7 +16,7 @@ export const expensesStore = defineStore("expenses", {
     },
     getUsersTransactions(state) {
       return state.usersTransactions;
-    }
+    },
   },
   actions: {
     setUsersExpenses(expenses) {
@@ -54,6 +54,20 @@ export const expensesStore = defineStore("expenses", {
       } catch (e) {
         throw new Error(e);
       }
-    }
+    },
+    async updateUserTransaction(expense) {
+      try {
+        await ExpenseService.updateExpense(expense, expense.id);
+      } catch (e) {
+        throw new Error(e);
+      }
+    },
+    async deleteUserTransaction(id) {
+      try {
+        await ExpenseService.deleteExpense(id);
+      } catch (e) {
+        throw new Error(e);
+      }
+    },
   },
 });

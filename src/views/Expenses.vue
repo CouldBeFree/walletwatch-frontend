@@ -11,18 +11,13 @@
       />
     </v-col>
     <v-col xs="12" sm="12" md="7" lg="5">
-      <ul>
-        <li v-for="item in getUsersExpenses" :key="item.id">{{item}}</li>
-      </ul>
-      <hr>
-      <ul>
-        <li v-for="item in getUsersTransactions" :key="item.id">{{item}}</li>
-      </ul>
       <TransactionExpenses
         :data="getUsersTransactions"
         :userData="getUsersExpenses"
+        :loading="transactionLoading"
         @update="onUpdate"
         @create="onCreate"
+        @delete="onDelete"
       />
     </v-col>
     <v-col xs="12" sm="12" md="6" lg="4">
@@ -46,7 +41,13 @@ const {
   onCreateExpense,
 } = useUserExpenses();
 
-const { getUsersTransactions, onUpdate, onCreate } = useTransactionExpenses();
+const {
+  getUsersTransactions,
+  onUpdate,
+  onCreate,
+  onDelete,
+  loading: transactionLoading,
+} = useTransactionExpenses();
 </script>
 
 <style scoped></style>

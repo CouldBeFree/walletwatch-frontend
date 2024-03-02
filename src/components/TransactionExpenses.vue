@@ -1,9 +1,5 @@
 <template>
-  <v-data-table
-    :items="data"
-    :headers="headers"
-    :loading="isLoadingExpenses"
-  >
+  <v-data-table :items="data" :headers="headers" :loading="loading">
     <template v-slot:top>
       <v-toolbar flat>
         <v-toolbar-title>Transaction Expenses</v-toolbar-title>
@@ -103,16 +99,14 @@
 </template>
 
 <script setup>
-import {ref, reactive, watch, computed} from "vue";
+import { ref, reactive, watch, computed } from "vue";
 import { amountRules } from "@/settings/validationRules";
 import { expensesStore } from "@/store/expenses";
 import { storeToRefs } from "pinia";
 import useFormStatusHandler from "@/composable/useFormStatusHandler";
-import ExpenseService from "@/service/apiService/ExpenseService";
-import getErrorMessage from "@/utils/getErrorMessage";
 
-const props = defineProps(["data", "userData"]);
-const emit = defineEmits(["delete", "create"]);
+const props = defineProps(["data", "userData", "loading"]);
+const emit = defineEmits(["delete", "create", "update"]);
 
 const initialExpenseState = {
   id: null,
@@ -125,11 +119,10 @@ const initialExpenseState = {
 const store = expensesStore();
 
 const { getUsersExpenses } = storeToRefs(store);
-const { valid, loading } = useFormStatusHandler();
+const { valid } = useFormStatusHandler();
 
 const amountValidation = ref(amountRules);
 const addExpense = ref(false);
-const isLoadingExpenses = ref(false);
 const dialogDelete = ref(false);
 const expense = reactive({ ...initialExpenseState });
 const headers = [
@@ -164,13 +157,8 @@ const closeDelete = () => {
 };
 
 const deleteItemConfirm = async () => {
-  try {
-    await ExpenseService.deleteExpense(expense.id);
-  } catch (e) {
-    const errorMsg = getErrorMessage(e);
-  } finally {
-    dialogDelete.value = false;
-  }
+  emit("delete", expense.id);
+  dialogDelete.value = false;
 };
 
 const deleteItem = (item) => {
@@ -179,31 +167,21 @@ const deleteItem = (item) => {
 };
 
 const editedCategoryName = computed(() => {
-  return props.userData.find(
-    (el) => el.id === expense.expense_category_id,
-  )?.expenses_category_name;
+  return props.userData.find((el) => el.id === expense.expense_category_id)
+    ?.expenses_category_name;
 });
 
 const onSubmit = async () => {
   if (!valid.value) return;
-  expense.id ? emit('update', { ...expense, expenses_category_name: editedCategoryName.value, id: expense.id }) : emit('create', expense);
+  expense.id
+    ? emit("update", {
+        ...expense,
+        expenses_category_name: editedCategoryName.value,
+        id: expense.id,
+      })
+    : emit("create", expense);
   Object.assign(expense, { ...initialExpenseState });
   addExpense.value = false;
-  // loading.value = true;
-  // try {
-  //   expense.id
-  //     ? await ExpenseService.updateExpense(
-  //         { ...expense, expenses_category_name: editedCategoryName.value },
-  //         expense.id,
-  //       )
-  //     : await ExpenseService.createExpense(expense);
-  // } catch (e) {
-  //   const errorMsg = getErrorMessage(e);
-  // } finally {
-  //   addExpense.value = false;
-  //   loading.value = false;
-  //   Object.assign(expense, { ...initialExpenseState });
-  // }
 };
 </script>
 
