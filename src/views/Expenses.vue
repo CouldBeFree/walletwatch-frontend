@@ -11,10 +11,17 @@
       />
     </v-col>
     <v-col xs="12" sm="12" md="7" lg="5">
-      <TransactionExpenses />
+      <TransactionExpenses
+        :data="getUsersTransactions"
+        :userData="getUsersExpenses"
+        :loading="transactionLoading"
+        @update="onUpdateUsersExpense"
+        @create="onCreateUsersExpense"
+        @delete="onDeleteUsersExpense"
+      />
     </v-col>
     <v-col xs="12" sm="12" md="6" lg="4">
-      <ExpenseChartStatistic />
+      <ExpenseChartStatistic :data="getStatistic" />
     </v-col>
   </v-row>
 </template>
@@ -24,6 +31,8 @@ import ExpenseChartStatistic from "@/components/ExpenseChartStatistic.vue";
 import UserExpenses from "@/components/UserExpenses.vue";
 import TransactionExpenses from "@/components/TransactionExpenses.vue";
 import useUserExpenses from "@/composable/Expenses/useUserExpenses";
+import useTransactionExpenses from "@/composable/Expenses/useTransactionExpenses";
+import useExpenseChart from "@/composable/Expenses/useExpenseChart";
 
 const {
   getAllExpenses,
@@ -32,6 +41,28 @@ const {
   onDeleteExpense,
   onCreateExpense,
 } = useUserExpenses();
+
+const {
+  getUsersTransactions,
+  onUpdate,
+  onCreate,
+  onDelete,
+  loading: transactionLoading,
+} = useTransactionExpenses();
+
+const { getStatistic, getData } = useExpenseChart();
+
+const onUpdateUsersExpense = (value) => {
+  onUpdate(value).then(() => getData());
+};
+
+const onCreateUsersExpense = (value) => {
+  onCreate(value).then(() => getData());
+};
+
+const onDeleteUsersExpense = (id) => {
+  onDelete(id).then(() => getData());
+};
 </script>
 
 <style scoped></style>
