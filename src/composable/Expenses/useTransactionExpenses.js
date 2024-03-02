@@ -26,6 +26,7 @@ export default function useTransactionExpenses() {
     } catch (e) {
       const errorMsg = getErrorMessage(e);
       proxy.publish(FIRE_SNACK, { type: "red", text: errorMsg });
+      throw new Error(e);
     } finally {
       loading.value = false;
     }
@@ -40,6 +41,7 @@ export default function useTransactionExpenses() {
     } catch (e) {
       const errorMsg = getErrorMessage(e);
       proxy.publish(FIRE_SNACK, { type: "red", text: errorMsg });
+      throw new Error(e);
     } finally {
       loading.value = false;
     }
@@ -54,6 +56,7 @@ export default function useTransactionExpenses() {
     } catch (e) {
       const errorMsg = getErrorMessage(e);
       proxy.publish(FIRE_SNACK, { type: "red", text: errorMsg });
+      throw new Error(e);
     } finally {
       loading.value = false;
     }

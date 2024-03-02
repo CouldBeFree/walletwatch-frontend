@@ -6,6 +6,7 @@ export const expensesStore = defineStore("expenses", {
     usersExpenses: [],
     allExpenses: [],
     usersTransactions: [],
+    statistic: [],
   }),
   getters: {
     getUsersExpenses: (state) => {
@@ -16,6 +17,9 @@ export const expensesStore = defineStore("expenses", {
     },
     getUsersTransactions(state) {
       return state.usersTransactions;
+    },
+    getStatistic(state) {
+      return state.statistic;
     },
   },
   actions: {
@@ -68,6 +72,10 @@ export const expensesStore = defineStore("expenses", {
       } catch (e) {
         throw new Error(e);
       }
+    },
+    async getUsersStatistic() {
+      const { data } = await ExpenseService.getStatisticByDate();
+      this.statistic = data;
     },
   },
 });
