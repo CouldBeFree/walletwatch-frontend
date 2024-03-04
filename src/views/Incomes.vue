@@ -11,7 +11,14 @@
       />
     </v-col>
     <v-col xs="12" sm="12" md="7" lg="5">
-      <h1>Transaction</h1>
+      <TransactionIncomes
+        :data="[]"
+        :userData="[]"
+        :loading="false"
+        @update="() => {}"
+        @create="() => {}"
+        @delete="() => {}"
+      />
     </v-col>
     <v-col xs="12" sm="12" md="6" lg="4"> <h1>Chart</h1></v-col>
   </v-row>
@@ -19,6 +26,7 @@
 
 <script setup>
 import UserIncomes from "@/components/Incomes/UserIncomes.vue";
+import TransactionIncomes from "@/components/Incomes/TransactionIncomes.vue";
 import useUserIncomes from "@/composable/Incomes/useUserIncomes";
 
 const {
