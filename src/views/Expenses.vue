@@ -27,9 +27,9 @@
 </template>
 
 <script setup>
-import ExpenseChartStatistic from "@/components/ExpenseChartStatistic.vue";
-import UserExpenses from "@/components/UserExpenses.vue";
-import TransactionExpenses from "@/components/TransactionExpenses.vue";
+import ExpenseChartStatistic from "@/components/Expenses/ExpenseChartStatistic.vue";
+import UserExpenses from "@/components/Expenses/UserExpenses.vue";
+import TransactionExpenses from "@/components/Expenses/TransactionExpenses.vue";
 import useUserExpenses from "@/composable/Expenses/useUserExpenses";
 import useTransactionExpenses from "@/composable/Expenses/useTransactionExpenses";
 import useExpenseChart from "@/composable/Expenses/useExpenseChart";
