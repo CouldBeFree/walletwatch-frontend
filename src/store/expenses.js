@@ -23,9 +23,6 @@ export const expensesStore = defineStore("expenses", {
     },
   },
   actions: {
-    setUsersExpenses(expenses) {
-      this.usersExpenses = expenses;
-    },
     async getUsersExpensesFromApi() {
       const { data } = await ExpenseService.getUserExpenses();
       this.usersExpenses = data;
