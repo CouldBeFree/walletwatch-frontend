@@ -16,6 +16,22 @@ class IncomeService {
   static getUsersIncomes() {
     return Gateway.get("/incomes/mine");
   }
+
+  static getAllCreatedIncomes() {
+    return Gateway.get("/operation/income");
+  }
+
+  static updateIncome(income, id) {
+    return Gateway.put(`/operation/income/${id}`, income);
+  }
+
+  static deleteUserIncome(id) {
+    return Gateway.delete(`/operation/income/${id}`);
+  }
+
+  static createTransaction(income) {
+    return Gateway.post("/operation/income", income);
+  }
 }
 
 export default IncomeService;

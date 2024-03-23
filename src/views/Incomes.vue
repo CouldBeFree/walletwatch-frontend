@@ -12,12 +12,12 @@
     </v-col>
     <v-col xs="12" sm="12" md="7" lg="5">
       <TransactionIncomes
-        :data="[]"
-        :userData="[]"
-        :loading="false"
-        @update="() => {}"
-        @create="() => {}"
-        @delete="() => {}"
+        :data="getUsersTransactions"
+        :userData="getUsersIncomes"
+        :loading="transactionIncomesLoading"
+        @update="onUpdateUserIncome"
+        @create="onCreateUsersIncome"
+        @delete="onDeleteuserIncomes"
       />
     </v-col>
     <v-col xs="12" sm="12" md="6" lg="4"> <h1>Chart</h1></v-col>
@@ -28,6 +28,8 @@
 import UserIncomes from "@/components/Incomes/UserIncomes.vue";
 import TransactionIncomes from "@/components/Incomes/TransactionIncomes.vue";
 import useUserIncomes from "@/composable/Incomes/useUserIncomes";
+import useTransactionIncomes from "@/composable/Incomes/useTransactionIncomes";
+import useIncomeChart from "@/composable/Incomes/useIncomeChart";
 
 const {
   loading,
@@ -36,6 +38,28 @@ const {
   onDeleteIncomes,
   onCreateIncome,
 } = useUserIncomes();
+
+const {
+  getUsersTransactions,
+  loading: transactionIncomesLoading,
+  onUpdate,
+  onCreate,
+  onDelete,
+} = useTransactionIncomes();
+
+const { getData, getStatistic } = useIncomeChart();
+
+const onUpdateUserIncome = (value) => {
+  onUpdate(value).then(() => getData());
+};
+
+const onCreateUsersIncome = (value) => {
+  onCreate(value).then(() => getData());
+};
+
+const onDeleteuserIncomes = (id) => {
+  onDelete(id).then(() => getData());
+};
 </script>
 
 <style scoped></style>

@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import IncomeService from "@/service/apiService/IncomeService";
+import ExpenseService from "@/service/apiService/ExpenseService";
 
 export const incomesStore = defineStore("incomes", {
   state: () => ({
@@ -44,6 +45,35 @@ export const incomesStore = defineStore("incomes", {
       } catch (e) {
         throw new Error(e);
       }
+    },
+    async getUserIncomes() {
+      const { data } = await IncomeService.getAllCreatedIncomes();
+      this.usersTransactions = data;
+    },
+    async updateUserTransaction(income) {
+      try {
+        await IncomeService.updateIncome(income, income.id);
+      } catch (e) {
+        throw new Error(e);
+      }
+    },
+    async createUserTransaction(income) {
+      try {
+        await IncomeService.createTransaction(income);
+      } catch (e) {
+        throw new Error(e);
+      }
+    },
+    async deleteUserTransaction(id) {
+      try {
+        await IncomeService.deleteUserIncome(id);
+      } catch (e) {
+        throw new Error(e);
+      }
+    },
+    async getUsersStatistic() {
+      const { data } = await ExpenseService.getStatisticByDate();
+      this.statistic = data;
     },
   },
 });
