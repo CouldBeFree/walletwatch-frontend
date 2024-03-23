@@ -1,1 +1,1 @@
-export default (e) => e.response?.data?.message;
+export default (e) => e.response?.data?.message || e.message;

@@ -2,21 +2,21 @@
   <v-data-table :items="data" :headers="headers" :loading="loading">
     <template v-slot:top>
       <v-toolbar flat>
-        <v-toolbar-title>Transaction Expenses</v-toolbar-title>
+        <v-toolbar-title>Transaction Incomes</v-toolbar-title>
         <v-divider class="mx-4" inset vertical></v-divider>
         <v-spacer></v-spacer>
-        <v-dialog v-model="addExpense" max-width="500px">
+        <v-dialog v-model="addIncome" max-width="500px">
           <template v-slot:activator="{ props }">
             <v-btn color="primary" dark class="mb-2" v-bind="props">
               New Item
             </v-btn>
           </template>
           <v-card>
-            <v-card-title>{{ expense.id ? "Edit" : "Create" }}</v-card-title>
+            <v-card-title>{{ income.id ? "Edit" : "Create" }}</v-card-title>
             <v-form @submit.prevent ref="form" v-model="valid" lazy-validation>
               <v-card-item>
                 <v-text-field
-                  v-model="expense.amount"
+                  v-model="income.amount"
                   :rules="amountValidation"
                   required
                   label="Amount"
@@ -24,27 +24,27 @@
                   prefix="₴"
                 />
                 <v-text-field
-                  v-model="expense.date"
+                  v-model="income.date"
                   type="date"
                   :rules="[(v) => !!v || 'Date is required']"
                   required
                 />
                 <v-select
                   label="Select"
-                  v-model="expense.expense_category_id"
-                  :items="getUsersExpenses"
+                  v-model="income.income_category_id"
+                  :items="getUsersIncomes"
                   item-value="id"
-                  item-title="expenses_category_name"
-                  :rules="[(v) => !!v || 'Expense is required']"
-                  :placeholder="'Select expense'"
-                  :persistent-placeholder="'Select expense'"
+                  item-title="incomes_category_name"
+                  :rules="[(v) => !!v || 'Income is required']"
+                  :placeholder="'Select income'"
+                  :persistent-placeholder="'Select income'"
                 ></v-select>
                 <v-card-actions>
                   <v-spacer></v-spacer>
                   <v-btn
                     variant="flat"
                     color="primary"
-                    @click="addExpense = false"
+                    @click="addIncome = false"
                   >
                     Cancel
                   </v-btn>
@@ -55,7 +55,7 @@
                     type="submit"
                     :loading="loading"
                   >
-                    {{ expense.id ? "Edit" : "Create" }}
+                    {{ income.id ? "Edit" : "Create" }}
                   </v-btn>
                 </v-card-actions>
               </v-card-item>
@@ -70,7 +70,7 @@
         >
           <v-card>
             <v-card-title class="text-h5"
-              >Remove {{ expense.expenses_category_name }}?</v-card-title
+              >Remove {{ income.incomes_category_name }}?</v-card-title
             >
             <v-card-actions>
               <v-spacer></v-spacer>
@@ -101,55 +101,55 @@
 <script setup>
 import { ref, reactive, watch, computed } from "vue";
 import { amountRules } from "@/settings/validationRules";
-import { expensesStore } from "@/store/expenses";
+import { incomesStore } from "@/store/incomes";
 import { storeToRefs } from "pinia";
 import useFormStatusHandler from "@/composable/useFormStatusHandler";
 
 const props = defineProps(["data", "userData", "loading"]);
 const emit = defineEmits(["delete", "create", "update"]);
 
-const initialExpenseState = {
+const initialIncomeState = {
   id: null,
   amount: null,
   date: null,
-  expense_category_id: null,
-  expense_category_name: null,
+  income_category_id: null,
+  incomes_category_name: null,
 };
 
-const store = expensesStore();
+const store = incomesStore();
 
-const { getUsersExpenses } = storeToRefs(store);
+const { getUsersIncomes } = storeToRefs(store);
 const { valid } = useFormStatusHandler();
 
 const amountValidation = ref(amountRules);
-const addExpense = ref(false);
+const addIncome = ref(false);
 const dialogDelete = ref(false);
-const expense = reactive({ ...initialExpenseState });
+const income = reactive({ ...initialIncomeState });
 const headers = [
-  { title: "Expense name", value: "expenses_category_name", sortable: true },
+  { title: "Income name", value: "incomes_category_name", sortable: true },
   { title: "Amount", value: "amount", sortable: true },
   { title: "Date", value: "date", sortable: true },
   { title: "Actions", key: "actions", sortable: false },
 ];
 
-watch(addExpense, (val) => {
+watch(addIncome, (val) => {
   if (!val) {
-    Object.assign(expense, { ...initialExpenseState });
+    Object.assign(income, { ...initialIncomeState });
   }
 });
 
 watch(dialogDelete, (val) => {
   if (!val) {
-    Object.assign(expense, { ...initialExpenseState });
+    Object.assign(income, { ...initialIncomeState });
   }
 });
 
 const editItem = (item) => {
   const id = props.userData.find(
-    (el) => el.expenses_category_name === item.expenses_category_name,
+    (el) => el.incomes_category_name === item.incomes_category_name,
   )?.id;
-  Object.assign(expense, { ...item, expense_category_id: id });
-  addExpense.value = true;
+  Object.assign(income, { ...item, income_category_id: id });
+  addIncome.value = true;
 };
 
 const closeDelete = () => {
@@ -157,31 +157,31 @@ const closeDelete = () => {
 };
 
 const deleteItemConfirm = async () => {
-  emit("delete", expense.id);
+  emit("delete", income.id);
   dialogDelete.value = false;
 };
 
 const deleteItem = (item) => {
   dialogDelete.value = true;
-  Object.assign(expense, { ...item });
+  Object.assign(income, { ...item });
 };
 
 const editedCategoryName = computed(() => {
-  return props.userData.find((el) => el.id === expense.expense_category_id)
-    ?.expenses_category_name;
+  return props.userData.find((el) => el.id === income.income_category_id)
+    ?.incomes_category_name;
 });
 
 const onSubmit = async () => {
   if (!valid.value) return;
-  expense.id
+  income.id
     ? emit("update", {
-        ...expense,
-        expenses_category_name: editedCategoryName.value,
-        id: expense.id,
+        ...income,
+        incomes_category_name: editedCategoryName.value,
+        id: income.id,
       })
-    : emit("create", expense);
-  Object.assign(expense, { ...initialExpenseState });
-  addExpense.value = false;
+    : emit("create", income);
+  Object.assign(income, { ...initialIncomeState });
+  addIncome.value = false;
 };
 </script>
 
