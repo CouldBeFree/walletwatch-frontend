@@ -4,10 +4,9 @@ import { onMounted } from "vue";
 
 export default function useIncomeChart() {
   const store = incomesStore();
-  const { getUsersStatistic } = storeToRefs(store);
+  const { getStatistic } = storeToRefs(store);
 
   onMounted(async () => {
-    console.log("store", store);
     await store.getUsersStatistic();
   });
 
@@ -15,5 +14,5 @@ export default function useIncomeChart() {
     await store.getUsersStatistic();
   };
 
-  return { getUsersStatistic, getData };
+  return { getStatistic, getData };
 }

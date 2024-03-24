@@ -18,7 +18,7 @@ const chartData = computed(() => {
   const backgroundColor = [];
 
   props.data?.forEach((st) => {
-    labels.push(st.expenses_category_name);
+    labels.push(st.income_category_name);
     data.push(st.amount_sum);
     backgroundColor.push(generateHex());
   });
@@ -35,4 +35,6 @@ const chartData = computed(() => {
 });
 </script>
 
-<style scoped></style>
+<style scoped>
+
+</style>

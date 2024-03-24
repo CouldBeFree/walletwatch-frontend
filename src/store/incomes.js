@@ -1,6 +1,5 @@
 import { defineStore } from "pinia";
 import IncomeService from "@/service/apiService/IncomeService";
-import ExpenseService from "@/service/apiService/ExpenseService";
 
 export const incomesStore = defineStore("incomes", {
   state: () => ({
@@ -72,8 +71,10 @@ export const incomesStore = defineStore("incomes", {
       }
     },
     async getUsersStatistic() {
-      const { data } = await ExpenseService.getStatisticByDate();
+      const { data } = await IncomeService.getStatisticByDate();
+      console.log('data', data);
       this.statistic = data;
+      console.log('st', this.statistic);
     },
   },
 });
