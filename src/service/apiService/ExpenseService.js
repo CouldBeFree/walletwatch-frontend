@@ -34,10 +34,12 @@ class ExpenseService {
   }
 
   static getStatisticByDate() {
+    const date = new Date();
+    const endDate = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
     return Gateway.get("/expenses/user/statistic", {
       params: {
         startDate: "2014-01-01",
-        endDate: "2024-03-01",
+        endDate: endDate,
       },
     });
   }

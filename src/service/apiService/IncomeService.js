@@ -32,6 +32,17 @@ class IncomeService {
   static createTransaction(income) {
     return Gateway.post("/operation/income", income);
   }
+
+  static getStatisticByDate() {
+    const date = new Date();
+    const endDate = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+    return Gateway.get("/incomes/user/statistic", {
+      params: {
+        startDate: "2014-01-01",
+        endDate: endDate,
+      },
+    });
+  }
 }
 
 export default IncomeService;
