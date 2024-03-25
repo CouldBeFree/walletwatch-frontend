@@ -6,7 +6,6 @@
 import { DoughnutChart } from "vue-chart-3";
 import { Chart, registerables } from "chart.js";
 import { computed } from "vue";
-import generateHex from "@/utils/generateHex";
 
 Chart.register(...registerables);
 
@@ -20,7 +19,7 @@ const chartData = computed(() => {
   props.data?.forEach((st) => {
     labels.push(st.expenses_category_name);
     data.push(st.amount_sum);
-    backgroundColor.push(generateHex());
+    backgroundColor.push(st.color);
   });
 
   return {
