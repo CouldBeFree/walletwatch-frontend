@@ -72,9 +72,9 @@ export const incomesStore = defineStore("incomes", {
     },
     async getUsersStatistic() {
       const { data } = await IncomeService.getStatisticByDate();
-      console.log('data', data);
+      console.log("data", data);
       this.statistic = data;
-      console.log('st', this.statistic);
+      console.log("st", this.statistic);
     },
   },
 });

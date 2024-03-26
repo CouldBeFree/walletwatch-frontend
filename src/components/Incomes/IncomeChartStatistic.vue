@@ -34,6 +34,4 @@ const chartData = computed(() => {
 });
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>
