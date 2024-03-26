@@ -1,5 +1,7 @@
 <template>
-  <h1>Expenses</h1>
+  <div class="mb-6">
+    <DateSelector />
+  </div>
   <v-row align="start">
     <v-col xs="12" sm="12" md="5" lg="3">
       <UserExpenses
@@ -33,6 +35,7 @@ import TransactionExpenses from "@/components/Expenses/TransactionExpenses.vue";
 import useUserExpenses from "@/composable/Expenses/useUserExpenses";
 import useTransactionExpenses from "@/composable/Expenses/useTransactionExpenses";
 import useExpenseChart from "@/composable/Expenses/useExpenseChart";
+import DateSelector from "@/components/DateSelector/DateSelector.vue";
 
 const {
   getAllExpenses,
