@@ -28,6 +28,14 @@
           title="Expenses"
           value="Expenses"
         ></v-list-item>
+        <v-list-item
+          :link="true"
+          exact
+          :to="'/dashboard/categories'"
+          prepend-icon="mdi-playlist-edit"
+          title="Categories"
+          value="Categories"
+        ></v-list-item>
       </v-list>
 
       <v-divider></v-divider>
