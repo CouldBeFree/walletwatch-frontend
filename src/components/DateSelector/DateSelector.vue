@@ -16,7 +16,7 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import useDateSelector from "@/composable/useDateSelector";
 
 const { getDate } = useDateSelector();

@@ -27,6 +27,7 @@ import useTransactionExpenses from "@/composable/Expenses/useTransactionExpenses
 import useExpenseChart from "@/composable/Expenses/useExpenseChart";
 import DateSelector from "@/components/DateSelector/DateSelector.vue";
 import { reactive } from "vue";
+import useDateSelector from "@/composable/useDateSelector";
 
 const { getUsersExpenses } = useUserExpenses();
 
@@ -40,8 +41,9 @@ const {
 } = useTransactionExpenses();
 
 const { getStatistic, getData } = useExpenseChart();
+const { getDate } = useDateSelector();
 
-const selectedDate = reactive({});
+const selectedDate = reactive(getDate("allTime"));
 
 const onDateSelect = async (value) => {
   Object.assign(selectedDate, { ...value });
