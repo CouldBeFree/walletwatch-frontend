@@ -1,6 +1,6 @@
 <template>
   <div class="mb-6">
-    <DateSelector />
+    <DateSelector @selectDate="onDateSelect" />
   </div>
   <v-row align="start">
     <v-col xs="12" sm="12" md="5" lg="3">
@@ -36,6 +36,7 @@ import useUserExpenses from "@/composable/Expenses/useUserExpenses";
 import useTransactionExpenses from "@/composable/Expenses/useTransactionExpenses";
 import useExpenseChart from "@/composable/Expenses/useExpenseChart";
 import DateSelector from "@/components/DateSelector/DateSelector.vue";
+import { reactive } from "vue";
 
 const {
   getAllExpenses,
@@ -50,21 +51,39 @@ const {
   onUpdate,
   onCreate,
   onDelete,
+  updateTransactionExpenses,
   loading: transactionLoading,
 } = useTransactionExpenses();
 
 const { getStatistic, getData } = useExpenseChart();
 
-const onUpdateUsersExpense = (value) => {
-  onUpdate(value).then(() => getData());
+const selectedDate = reactive({});
+
+const onDateSelect = async (value) => {
+  Object.assign(selectedDate, { ...value });
+  await updateTransactionExpenses(value);
+  await getData(value);
+};
+
+const onUpdateUsersExpense = async (value) => {
+  onUpdate(value).then(() => {
+    updateTransactionExpenses(selectedDate);
+    getData(selectedDate);
+  });
 };
 
 const onCreateUsersExpense = (value) => {
-  onCreate(value).then(() => getData());
+  onCreate(value).then(() => {
+    updateTransactionExpenses(selectedDate);
+    getData(selectedDate);
+  });
 };
 
 const onDeleteUsersExpense = (id) => {
-  onDelete(id).then(() => getData());
+  onDelete(id).then(() => {
+    updateTransactionExpenses(selectedDate);
+    getData(selectedDate);
+  });
 };
 </script>
 

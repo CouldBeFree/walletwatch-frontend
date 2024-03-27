@@ -21,7 +21,6 @@ export default function useTransactionExpenses() {
     loading.value = true;
     try {
       await store.updateUserTransaction(val);
-      await store.getUserTransactions();
       proxy.publish(FIRE_SNACK, { type: "green", text: "Success" });
     } catch (e) {
       const errorMsg = getErrorMessage(e);
@@ -36,7 +35,6 @@ export default function useTransactionExpenses() {
     loading.value = true;
     try {
       await store.createUserTransaction(val);
-      await store.getUserTransactions();
       proxy.publish(FIRE_SNACK, { type: "green", text: "Success" });
     } catch (e) {
       const errorMsg = getErrorMessage(e);
@@ -51,7 +49,6 @@ export default function useTransactionExpenses() {
     loading.value = true;
     try {
       await store.deleteUserTransaction(id);
-      await store.getUserTransactions();
       proxy.publish(FIRE_SNACK, { type: "green", text: "Success" });
     } catch (e) {
       const errorMsg = getErrorMessage(e);
@@ -62,5 +59,15 @@ export default function useTransactionExpenses() {
     }
   };
 
-  return { getUsersTransactions, onUpdate, onCreate, onDelete };
+  const updateTransactionExpenses = (date) => {
+    return store.getUserTransactions(date);
+  };
+
+  return {
+    getUsersTransactions,
+    onUpdate,
+    onCreate,
+    onDelete,
+    updateTransactionExpenses,
+  };
 }

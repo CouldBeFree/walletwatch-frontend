@@ -21,6 +21,7 @@ import useDateSelector from "@/composable/useDateSelector";
 
 const { getDate } = useDateSelector();
 
+const emit = defineEmits(["selectDate"]);
 const filters = [
   {
     type: "allTime",
@@ -56,6 +57,10 @@ const selectedType = ref("allTime");
 const handleClick = (type) => {
   getDate(type);
   selectedType.value = type;
+  const date = getDate(type);
+  if (date) {
+    emit("selectDate", date);
+  }
 };
 </script>
 

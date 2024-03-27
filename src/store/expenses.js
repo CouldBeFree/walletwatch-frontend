@@ -45,8 +45,8 @@ export const expensesStore = defineStore("expenses", {
         throw new Error(e);
       }
     },
-    async getUserTransactions() {
-      const { data } = await ExpenseService.getAllCreatedExpenses();
+    async getUserTransactions(date) {
+      const { data } = await ExpenseService.getAllCreatedExpenses(date);
       this.usersTransactions = data;
     },
     async createUserTransaction(expense) {
@@ -70,8 +70,8 @@ export const expensesStore = defineStore("expenses", {
         throw new Error(e);
       }
     },
-    async getUsersStatistic() {
-      const { data } = await ExpenseService.getStatisticByDate();
+    async getUsersStatistic(date) {
+      const { data } = await ExpenseService.getStatisticByDate(date);
       this.statistic = data;
     },
   },

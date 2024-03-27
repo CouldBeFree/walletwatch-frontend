@@ -25,21 +25,24 @@ class ExpenseService {
     return Gateway.put(`/operation/expense/${id}`, expense);
   }
 
-  static getAllCreatedExpenses() {
-    return Gateway.get("/operation/expense");
+  static getAllCreatedExpenses(date) {
+    return Gateway.get("/operation/expense", {
+      params: {
+        ...(date && { startDate: date.startDate }),
+        ...(date && { endDate: date.endDate }),
+      },
+    });
   }
 
   static deleteExpense(id) {
     return Gateway.delete(`/operation/expense/${id}`);
   }
 
-  static getStatisticByDate() {
-    const date = new Date();
-    const endDate = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+  static getStatisticByDate(date) {
     return Gateway.get("/expenses/user/statistic", {
       params: {
-        startDate: "2014-01-01",
-        endDate: endDate,
+        ...(date && { startDate: date.startDate }),
+        ...(date && { endDate: date.endDate }),
       },
     });
   }
