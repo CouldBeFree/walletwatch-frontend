@@ -9,6 +9,9 @@ export default function useDateSelector() {
 
   const todayCached = cache(getToday());
 
+  const formatDate = (originalDate) =>
+    moment(originalDate).format("YYYY-MM-DD");
+
   const allTime = () => {
     const t = moment().subtract(10, "years").format("YYYY-MM-DD");
     return {
@@ -61,5 +64,5 @@ export default function useDateSelector() {
     }
   };
 
-  return { getDate };
+  return { getDate, formatDate };
 }
