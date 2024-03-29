@@ -17,8 +17,13 @@ class IncomeService {
     return Gateway.get("/incomes/mine");
   }
 
-  static getAllCreatedIncomes() {
-    return Gateway.get("/operation/income");
+  static getAllCreatedIncomes(date) {
+    return Gateway.get("/operation/income", {
+      params: {
+        ...(date && { startDate: date.startDate }),
+        ...(date && { endDate: date.endDate }),
+      },
+    });
   }
 
   static updateIncome(income, id) {
@@ -33,13 +38,11 @@ class IncomeService {
     return Gateway.post("/operation/income", income);
   }
 
-  static getStatisticByDate() {
-    const date = new Date();
-    const endDate = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+  static getStatisticByDate(date) {
     return Gateway.get("/incomes/user/statistic", {
       params: {
-        startDate: "2014-01-01",
-        endDate: endDate,
+        ...(date && { startDate: date.startDate }),
+        ...(date && { endDate: date.endDate }),
       },
     });
   }

@@ -1,5 +1,7 @@
 <template>
-  <h1>Incomes</h1>
+  <div class="mb-6">
+    <DateSelector @selectDate="onDateSelect" />
+  </div>
   <v-row align="start">
     <v-col xs="12" sm="7" md="7" lg="7">
       <TransactionIncomes
@@ -23,6 +25,9 @@ import IncomeChartStatistic from "@/components/Incomes/IncomeChartStatistic.vue"
 import useUserIncomes from "@/composable/Incomes/useUserIncomes";
 import useTransactionIncomes from "@/composable/Incomes/useTransactionIncomes";
 import useIncomeChart from "@/composable/Incomes/useIncomeChart";
+import DateSelector from "@/components/DateSelector/DateSelector.vue";
+import { reactive } from "vue";
+import useDateSelector from "@/composable/useDateSelector";
 
 const { getUsersIncomes } = useUserIncomes();
 
@@ -32,20 +37,39 @@ const {
   onUpdate,
   onCreate,
   onDelete,
+  onUpdateUserIncomes,
 } = useTransactionIncomes();
 
 const { getData, getStatistic } = useIncomeChart();
+const { getDate } = useDateSelector();
+
+const selectedDate = reactive(getDate("allTime"));
+
+const onDateSelect = async (value) => {
+  Object.assign(selectedDate, { ...value });
+  await onUpdateUserIncomes(value);
+  await getData(value);
+};
 
 const onUpdateUserIncome = (value) => {
-  onUpdate(value).then(() => getData());
+  onUpdate(value).then(() => {
+    onUpdateUserIncomes(selectedDate);
+    getData(selectedDate);
+  });
 };
 
 const onCreateUsersIncome = (value) => {
-  onCreate(value).then(() => getData());
+  onCreate(value).then(() => {
+    onUpdateUserIncomes(selectedDate);
+    getData(selectedDate);
+  });
 };
 
 const onDeleteuserIncomes = (id) => {
-  onDelete(id).then(() => getData());
+  onDelete(id).then(() => {
+    onUpdateUserIncomes(selectedDate);
+    getData(selectedDate);
+  });
 };
 </script>
 

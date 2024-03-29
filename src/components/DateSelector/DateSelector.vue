@@ -18,6 +18,7 @@
       <v-divider></v-divider>
       <v-card-item>
         <v-date-picker
+          :multiple="isDateSelectorMultiple"
           title="Select Day"
           v-model="rawSelectedDate"
         ></v-date-picker>
@@ -82,11 +83,21 @@ const onCancelDate = () => {
   isSelectDayModalOpen.value = false;
 };
 
+const isDateSelectorMultiple = computed(() => selectedType.value === "range");
+
 const formattedDay = computed(() => {
-  if (rawSelectedDate.value) {
+  if (rawSelectedDate.value && typeof rawSelectedDate.value === "string") {
     return {
       startDate: formatDate(rawSelectedDate.value),
       endDate: formatDate(rawSelectedDate.value),
+    };
+  }
+  if (rawSelectedDate.value && Array.isArray(rawSelectedDate.value)) {
+    return {
+      startDate: formatDate(rawSelectedDate.value[0]),
+      endDate: formatDate(
+        rawSelectedDate.value[rawSelectedDate.value.length - 1],
+      ),
     };
   }
   return null;
@@ -98,7 +109,7 @@ const onSaveDate = () => {
 };
 
 const handleClick = (type) => {
-  if (type === "day") {
+  if (type === "day" || type === "range") {
     selectedType.value = type;
     isSelectDayModalOpen.value = true;
     return;

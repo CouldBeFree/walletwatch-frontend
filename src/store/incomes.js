@@ -45,8 +45,8 @@ export const incomesStore = defineStore("incomes", {
         throw new Error(e);
       }
     },
-    async getUserIncomes() {
-      const { data } = await IncomeService.getAllCreatedIncomes();
+    async getUserIncomes(date) {
+      const { data } = await IncomeService.getAllCreatedIncomes(date);
       this.usersTransactions = data;
     },
     async updateUserTransaction(income) {
@@ -70,11 +70,9 @@ export const incomesStore = defineStore("incomes", {
         throw new Error(e);
       }
     },
-    async getUsersStatistic() {
-      const { data } = await IncomeService.getStatisticByDate();
-      console.log("data", data);
+    async getUsersStatistic(date) {
+      const { data } = await IncomeService.getStatisticByDate(date);
       this.statistic = data;
-      console.log("st", this.statistic);
     },
   },
 });
