@@ -4,16 +4,16 @@
       class="text-h3 text-center mb-5 text-red-darken-3"
       :class="{
         'text-red-darken-3': total < 0,
-        'text-green-darken-3': total > 0,
+        'text-green-darken-3': total >= 0,
       }"
     >
       Overall {{ total }} ₴
     </p>
     <v-row align="start">
-      <v-col xs="12" sm="12" md="6" lg="6">
+      <v-col cols="12" xs="12" sm="12" md="6" lg="6">
         <ExpenseChartStatistic :data="expenseValue" />
       </v-col>
-      <v-col xs="12" sm="12" md="6" lg="6">
+      <v-col cols="12" xs="12" sm="12" md="6" lg="6">
         <IncomeChartStatistic :data="incomeValue" />
       </v-col>
     </v-row>
