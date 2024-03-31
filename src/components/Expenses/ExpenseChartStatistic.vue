@@ -1,6 +1,6 @@
 <template>
   <div class="text-center">
-    <p class="text-h4 mb-4">Total expense {{totalCount}}₴</p>
+    <p class="text-h4 mb-4">Total expense {{ totalCount }}₴</p>
     <DoughnutChart :chartData="chartData" />
   </div>
 </template>
@@ -17,8 +17,8 @@ const props = defineProps(["data"]);
 const totalCount = computed(() => {
   let count = 0;
   props.data.forEach((item) => {
-    count += item.amount_sum
-  })
+    count += item.amount_sum;
+  });
   return count;
 });
 

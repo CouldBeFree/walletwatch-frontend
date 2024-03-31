@@ -43,7 +43,7 @@ const {
 const { getStatistic, getData } = useExpenseChart();
 const { getDate } = useDateSelector();
 
-const selectedDate = reactive(getDate("allTime"));
+const selectedDate = reactive(getDate("month"));
 
 const onDateSelect = async (value) => {
   Object.assign(selectedDate, { ...value });

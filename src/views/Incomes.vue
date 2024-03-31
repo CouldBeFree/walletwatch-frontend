@@ -10,7 +10,7 @@
         :loading="transactionIncomesLoading"
         @update="onUpdateUserIncome"
         @create="onCreateUsersIncome"
-        @delete="onDeleteuserIncomes"
+        @delete="onDeleteUserIncomes"
       />
     </v-col>
     <v-col xs="12" sm="5" md="5" lg="5">
@@ -43,7 +43,7 @@ const {
 const { getData, getStatistic } = useIncomeChart();
 const { getDate } = useDateSelector();
 
-const selectedDate = reactive(getDate("allTime"));
+const selectedDate = reactive(getDate("month"));
 
 const onDateSelect = async (value) => {
   Object.assign(selectedDate, { ...value });
@@ -65,7 +65,7 @@ const onCreateUsersIncome = (value) => {
   });
 };
 
-const onDeleteuserIncomes = (id) => {
+const onDeleteUserIncomes = (id) => {
   onDelete(id).then(() => {
     onUpdateUserIncomes(selectedDate);
     getData(selectedDate);

@@ -46,6 +46,10 @@ const { getDate, formatDate } = useDateSelector();
 const emit = defineEmits(["selectDate"]);
 const filters = [
   {
+    type: "month",
+    text: "Month",
+  },
+  {
     type: "allTime",
     text: "All time",
   },
@@ -66,15 +70,11 @@ const filters = [
     text: "Year",
   },
   {
-    type: "month",
-    text: "Month",
-  },
-  {
     type: "range",
     text: "Date range",
   },
 ];
-const selectedType = ref("allTime");
+const selectedType = ref("month");
 const isSelectDayModalOpen = ref(false);
 const rawSelectedDate = ref(null);
 const selectedDay = ref(null);

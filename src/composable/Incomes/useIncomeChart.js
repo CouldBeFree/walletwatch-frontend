@@ -9,7 +9,7 @@ export default function useIncomeChart() {
   const { getStatistic } = storeToRefs(store);
 
   onMounted(async () => {
-    await store.getUsersStatistic(getDate("allTime"));
+    await store.getUsersStatistic(getDate("month"));
   });
 
   const getData = async (date) => {

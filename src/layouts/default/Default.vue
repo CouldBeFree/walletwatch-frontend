@@ -15,6 +15,14 @@
         <v-list-item
           :link="true"
           exact
+          :to="'/dashboard'"
+          prepend-icon="mdi-home-analytics"
+          title="Home"
+          value="Home"
+        ></v-list-item>
+        <v-list-item
+          :link="true"
+          exact
           :to="'/dashboard/incomes'"
           prepend-icon="mdi-cash-fast"
           title="Incomes"
