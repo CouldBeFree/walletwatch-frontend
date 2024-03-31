@@ -1,5 +1,8 @@
 <template>
-  <DoughnutChart :chartData="chartData" />
+  <div class="text-center">
+    <p class="text-h4 mb-4">Total expense {{totalCount}}₴</p>
+    <DoughnutChart :chartData="chartData" />
+  </div>
 </template>
 
 <script setup>
@@ -10,6 +13,14 @@ import { computed } from "vue";
 Chart.register(...registerables);
 
 const props = defineProps(["data"]);
+
+const totalCount = computed(() => {
+  let count = 0;
+  props.data.forEach((item) => {
+    count += item.amount_sum
+  })
+  return count;
+});
 
 const chartData = computed(() => {
   const labels = [];
