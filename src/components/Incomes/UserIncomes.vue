@@ -16,7 +16,10 @@
         </thead>
         <tbody>
           <tr v-for="item in userData" :key="item.id">
-            <td>{{ item.incomes_category_name }}</td>
+            <td>
+              <v-icon :icon="getIncomeIcon(item.incomes_category_name)"></v-icon>
+              {{ item.incomes_category_name }}
+            </td>
             <td class="text-right">
               <v-btn
                 icon="mdi-delete"
@@ -103,6 +106,7 @@
 <script setup>
 import { computed, ref } from "vue";
 import { reactive } from "vue";
+import getIncomeIcon from "@/utils/getIncomeIcon";
 
 const props = defineProps(["data", "userData", "loading"]);
 const emit = defineEmits(["delete", "create"]);

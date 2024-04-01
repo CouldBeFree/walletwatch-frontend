@@ -1,7 +1,9 @@
 import TransactionHistory from "@/service/apiService/TransactionHistory";
 import { onMounted, reactive } from "vue";
+import useDateSelector from "@/composable/useDateSelector";
 
 export default function useTransactionHistory() {
+  const { getDate } = useDateSelector();
   const history = reactive([]);
 
   const getTransactionHistory = async (date) => {
@@ -14,7 +16,7 @@ export default function useTransactionHistory() {
   };
 
   onMounted(async () => {
-    await getTransactionHistory();
+    await getTransactionHistory(getDate("month"));
   });
 
   return { history, getTransactionHistory };
