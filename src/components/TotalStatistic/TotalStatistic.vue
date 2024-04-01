@@ -11,10 +11,10 @@
     </p>
     <v-row align="start">
       <v-col cols="12" xs="12" sm="12" md="6" lg="6">
-        <ExpenseChartStatistic :data="expenseValue" />
+        <ExpenseChartStatistic :data="props.expenseValue" />
       </v-col>
       <v-col cols="12" xs="12" sm="12" md="6" lg="6">
-        <IncomeChartStatistic :data="incomeValue" />
+        <IncomeChartStatistic :data="props.incomeValue" />
       </v-col>
     </v-row>
   </v-card>
@@ -22,31 +22,14 @@
 
 <script setup>
 import ExpenseChartStatistic from "@/components/Expenses/ExpenseChartStatistic.vue";
-import useExpenseChart from "@/composable/Expenses/useExpenseChart";
-import useIncomeChart from "@/composable/Incomes/useIncomeChart";
 import IncomeChartStatistic from "@/components/Incomes/IncomeChartStatistic.vue";
 import calculateTotal from "@/utils/calculateTotal";
-import { computed, watch } from "vue";
+import { computed } from "vue";
 
-const { getStatistic: expenseValue, getData: getExpenseData } =
-  useExpenseChart();
-const { getStatistic: incomeValue, getData: getIncomeData } = useIncomeChart();
-
-const props = defineProps(["date"]);
-
-watch(
-  props.date,
-  (newType) => {
-    getExpenseData(newType);
-    getIncomeData(newType);
-  },
-  {
-    deep: true,
-  },
-);
+const props = defineProps(["expenseValue", "incomeValue"]);
 
 const total = computed(() => {
-  return calculateTotal(incomeValue.value) - calculateTotal(expenseValue.value);
+  return calculateTotal(props.incomeValue) - calculateTotal(props.expenseValue);
 });
 </script>
 
