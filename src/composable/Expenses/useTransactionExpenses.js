@@ -11,12 +11,6 @@ export default function useTransactionExpenses() {
 
   const loading = ref(false);
 
-  onMounted(async () => {
-    loading.value = true;
-    await store.getUserTransactions();
-    loading.value = false;
-  });
-
   const onUpdate = async (val) => {
     loading.value = true;
     try {
@@ -59,8 +53,10 @@ export default function useTransactionExpenses() {
     }
   };
 
-  const updateTransactionExpenses = (date) => {
-    return store.getUserTransactions(date);
+  const updateTransactionExpenses = async (date) => {
+    loading.value = true;
+    await store.getUserTransactions(date);
+    loading.value = false;
   };
 
   return {

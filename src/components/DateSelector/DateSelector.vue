@@ -1,5 +1,5 @@
 <template>
-  <v-sheet max-width="600">
+  <v-sheet class="mx-auto">
     <v-slide-group show-arrows>
       <v-slide-group-item v-for="n in filters" :key="n.type">
         <v-btn

@@ -1,6 +1,6 @@
 import { incomesStore } from "@/store/incomes";
 import { storeToRefs } from "pinia";
-import { onMounted, ref } from "vue";
+import { ref } from "vue";
 import proxy from "@/utils/proxy";
 import { FIRE_SNACK } from "@/constants";
 import getErrorMessage from "@/utils/getErrorMessage";
@@ -10,12 +10,6 @@ export default function useTransactionIncomes() {
   const { getUsersTransactions } = storeToRefs(store);
 
   const loading = ref(false);
-
-  onMounted(async () => {
-    loading.value = true;
-    await store.getUserIncomes();
-    loading.value = false;
-  });
 
   const onUpdate = async (val) => {
     loading.value = true;
@@ -59,8 +53,10 @@ export default function useTransactionIncomes() {
     }
   };
 
-  const onUpdateUserIncomes = (date) => {
-    return store.getUserIncomes(date);
+  const onUpdateUserIncomes = async (date) => {
+    loading.value = true;
+    await store.getUserIncomes(date);
+    loading.value = false;
   };
 
   return {

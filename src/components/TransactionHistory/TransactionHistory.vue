@@ -1,15 +1,25 @@
 <template>
-  <v-card class="mx-auto" max-width="300">
-    <!--    <v-list :items="items"></v-list>-->
+  <v-card class="mx-auto">
+    <v-list>
+      <v-list-item
+        v-for="item in history"
+        :key="item.id"
+        :title="`${item.amount} ₴`"
+        :subtitle="item.transaction_date"
+      >
+        <template v-slot:subtitle="{ subtitle }">
+          <div v-html="subtitle"></div>
+        </template>
+      </v-list-item>
+    </v-list>
   </v-card>
-  <!--  {{history}}-->
-  <!--  {{value}}-->
+  {{ history }}
 </template>
 
 <script setup>
-// import useTransactionHistory from "@/composable/useTransactionHistory";
+import useTransactionHistory from "@/composable/useTransactionHistory";
 
-// const { history } = useTransactionHistory();
+const { history } = useTransactionHistory();
 </script>
 
 <style scoped></style>

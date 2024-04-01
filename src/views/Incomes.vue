@@ -1,9 +1,9 @@
 <template>
-  <div class="mb-6">
-    <DateSelector @selectDate="onDateSelect" />
-  </div>
   <v-row align="start">
     <v-col xs="12" sm="7" md="7" lg="7">
+      <div class="mb-6">
+        <DateSelector @selectDate="onDateSelect" />
+      </div>
       <TransactionIncomes
         :data="getUsersTransactions"
         :userData="getUsersIncomes"
@@ -26,7 +26,7 @@ import useUserIncomes from "@/composable/Incomes/useUserIncomes";
 import useTransactionIncomes from "@/composable/Incomes/useTransactionIncomes";
 import useIncomeChart from "@/composable/Incomes/useIncomeChart";
 import DateSelector from "@/components/DateSelector/DateSelector.vue";
-import { reactive } from "vue";
+import { onMounted, reactive } from "vue";
 import useDateSelector from "@/composable/useDateSelector";
 
 const { getUsersIncomes } = useUserIncomes();
@@ -44,6 +44,10 @@ const { getData, getStatistic } = useIncomeChart();
 const { getDate } = useDateSelector();
 
 const selectedDate = reactive(getDate("month"));
+
+onMounted(() => {
+  onUpdateUserIncomes(selectedDate);
+});
 
 const onDateSelect = async (value) => {
   Object.assign(selectedDate, { ...value });

@@ -1,14 +1,14 @@
 <template>
   <v-row>
-    <v-col lg="6">
-      <div class="mb-6">
+    <v-col cols="12" offset-lg="3" lg="6">
+      <div class="mb-6 text-center">
         <DateSelector @selectDate="onDateSelect" />
       </div>
       <TotalStatistic :date="selectedDate" />
     </v-col>
-    <!--    <v-col lg="5">-->
-    <!--      <TransactionHistory />-->
-    <!--    </v-col>-->
+<!--    <v-col lg="5">-->
+<!--      <TransactionHistory />-->
+<!--    </v-col>-->
   </v-row>
 </template>
 
