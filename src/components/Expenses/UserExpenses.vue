@@ -17,7 +17,11 @@
         <tbody>
           <tr v-for="item in userData" :key="item.id">
             <td>
-              <v-icon :icon="getExpenseIcon(item.expenses_category_name)" size="large" start />
+              <v-icon
+                :icon="getExpenseIcon(item.expenses_category_name)"
+                size="large"
+                start
+              />
               {{ item.expenses_category_name }}
             </td>
             <td class="text-right">

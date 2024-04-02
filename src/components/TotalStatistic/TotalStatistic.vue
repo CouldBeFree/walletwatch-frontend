@@ -1,5 +1,5 @@
 <template>
-  <v-card class="pb-6 pt-5">
+  <v-card class="pb-6 pt-5" :loading="loading">
     <p
       class="text-h3 text-center mb-5 text-red-darken-3"
       :class="{
@@ -26,7 +26,7 @@ import IncomeChartStatistic from "@/components/Incomes/IncomeChartStatistic.vue"
 import calculateTotal from "@/utils/calculateTotal";
 import { computed } from "vue";
 
-const props = defineProps(["expenseValue", "incomeValue"]);
+const props = defineProps(["expenseValue", "incomeValue", "loading"]);
 
 const total = computed(() => {
   return calculateTotal(props.incomeValue) - calculateTotal(props.expenseValue);

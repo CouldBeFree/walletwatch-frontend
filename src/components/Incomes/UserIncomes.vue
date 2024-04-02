@@ -17,7 +17,9 @@
         <tbody>
           <tr v-for="item in userData" :key="item.id">
             <td>
-              <v-icon :icon="getIncomeIcon(item.incomes_category_name)"></v-icon>
+              <v-icon
+                :icon="getIncomeIcon(item.incomes_category_name)"
+              ></v-icon>
               {{ item.incomes_category_name }}
             </td>
             <td class="text-right">
