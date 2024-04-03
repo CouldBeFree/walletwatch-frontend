@@ -1,5 +1,5 @@
 <template>
-  <v-data-table :items="data" :headers="headers" :loading="loading">
+  <v-data-table :items="transformedData" :headers="headers" :loading="loading">
     <template v-slot:top>
       <v-toolbar flat>
         <v-toolbar-title>Transaction Expenses</v-toolbar-title>
@@ -103,10 +103,19 @@ import { ref, reactive, watch, computed } from "vue";
 import { amountRules } from "@/settings/validationRules";
 import { expensesStore } from "@/store/expenses";
 import { storeToRefs } from "pinia";
+import commaSeparator from "@/utils/commaSeparator";
 import useFormStatusHandler from "@/composable/useFormStatusHandler";
 
 const props = defineProps(["data", "userData", "loading"]);
 const emit = defineEmits(["delete", "create", "update"]);
+
+const transformedData = computed(() => {
+  return props.data?.map(el => {
+    return {
+      ...el, amount: commaSeparator(el.amount)
+    }
+  })
+});
 
 const initialExpenseState = {
   id: null,

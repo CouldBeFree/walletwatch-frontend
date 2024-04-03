@@ -26,7 +26,7 @@
               'text-red-accent-3': item.expenses,
             }"
           >
-            {{ item.amount }}₴
+            {{ commaSeparator(item.amount) }}₴
           </v-card-text>
         </v-card>
       </v-col>
@@ -37,6 +37,7 @@
 <script setup>
 import getExpenseIcon from "@/utils/getExpenseIcon";
 import getIncomeIcon from "@/utils/getIncomeIcon";
+import commaSeparator from "@/utils/commaSeparator";
 
 const setIcon = (isExpense, categoryName) => {
   if (isExpense) {

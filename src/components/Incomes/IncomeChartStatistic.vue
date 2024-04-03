@@ -1,11 +1,12 @@
 <template>
   <div class="text-center">
-    <p class="text-h4 mb-4">Total income {{ totalCount }}₴</p>
+    <p class="text-h4 mb-4">Total income {{ commaSeparator(totalCount) }}₴</p>
     <DoughnutChart :chartData="chartData" />
   </div>
 </template>
 
 <script setup>
+import commaSeparator from "@/utils/commaSeparator";
 import { DoughnutChart } from "vue-chart-3";
 import { Chart, registerables } from "chart.js";
 import { computed } from "vue";

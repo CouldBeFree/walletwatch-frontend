@@ -1,5 +1,5 @@
 <template>
-  <v-data-table :items="data" :headers="headers" :loading="loading">
+  <v-data-table :items="transformedData" :headers="headers" :loading="loading">
     <template v-slot:top>
       <v-toolbar flat>
         <v-toolbar-title>Transaction Incomes</v-toolbar-title>
@@ -104,9 +104,18 @@ import { amountRules } from "@/settings/validationRules";
 import { incomesStore } from "@/store/incomes";
 import { storeToRefs } from "pinia";
 import useFormStatusHandler from "@/composable/useFormStatusHandler";
+import commaSeparator from "@/utils/commaSeparator";
 
 const props = defineProps(["data", "userData", "loading"]);
 const emit = defineEmits(["delete", "create", "update"]);
+
+const transformedData = computed(() => {
+  return props.data?.map(el => {
+    return {
+      ...el, amount: commaSeparator(el.amount)
+    }
+  })
+});
 
 const initialIncomeState = {
   id: null,
