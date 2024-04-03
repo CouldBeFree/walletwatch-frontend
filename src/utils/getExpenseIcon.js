@@ -1,6 +1,6 @@
 export default (expenseName) => {
   switch (expenseName) {
-    case "Car":
+    case "Vehicle":
       return "mdi-car-back";
     case "Pets":
       return "mdi-paw";
@@ -16,9 +16,11 @@ export default (expenseName) => {
       return "mdi-coffee-to-go-outline";
     case "Credits payment":
       return "mdi-credit-card-outline";
-    case "Medicine":
-      return "mdi-medical-bag";
+    case "Health":
+      return "mdi-bottle-tonic-plus-outline";
     case "Self education":
       return "mdi-cast-education";
+    case "Shopping":
+      return "mdi-shopping-outline";
   }
 };
