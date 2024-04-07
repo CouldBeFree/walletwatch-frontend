@@ -39,6 +39,14 @@
         <v-list-item
           :link="true"
           exact
+          :to="'/dashboard/goals'"
+          prepend-icon="mdi-flag-checkered"
+          title="Goals"
+          value="Goals"
+        ></v-list-item>
+        <v-list-item
+          :link="true"
+          exact
           :to="'/dashboard/categories'"
           prepend-icon="mdi-playlist-edit"
           title="Categories"

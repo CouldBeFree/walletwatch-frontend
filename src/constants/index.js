@@ -6,3 +6,4 @@ export const PASSWORD_TYPE = "password";
 export const DARK_THEME = "dark";
 export const LIGHT_THEME = "light";
 export const FIRE_SNACK = "fire_snack";
+export const CURRENCY = [{ name: "usd" }, { name: "uah" }];
