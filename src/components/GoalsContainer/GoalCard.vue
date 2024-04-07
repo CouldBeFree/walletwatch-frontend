@@ -16,12 +16,13 @@
         </div>
       </v-progress-circular>
       <p class="text-h7 mt-2 mb-2">
-        Desired amount {{ value?.target_amount }}{{ currencyIcon }}
+        Desired amount {{ commaSeparator(value?.target_amount)
+        }}{{ currencyIcon }}
       </p>
       <p class="text-h7">
-        Already saved {{ value?.already_saved }}{{ currencyIcon }}
+        Already saved {{ commaSeparator(value?.already_saved)
+        }}{{ currencyIcon }}
       </p>
-      <!--      <v-icon size="small"> mdi-delete </v-icon>-->
     </v-card-text>
     <v-card-actions>
       <v-spacer></v-spacer>
@@ -44,19 +45,54 @@
         >
           Edit
         </v-btn>
-        <v-btn variant="flat" color="red" width="full-width" block>
+        <v-btn
+          variant="flat"
+          color="red"
+          width="full-width"
+          block
+          @click="dialogDelete = true"
+        >
           Remove
         </v-btn>
       </div>
     </v-card-actions>
   </v-card>
+  <v-dialog v-model="dialogDelete" scrollable max-width="500px" width="400">
+    <v-card>
+      <v-card-title class="text-h5">Remove {{ value.goal_name }}?</v-card-title>
+      <v-card-actions>
+        <v-spacer></v-spacer>
+        <v-btn
+          color="blue-darken-1"
+          variant="flat"
+          @click="dialogDelete = false"
+          >Cancel</v-btn
+        >
+        <v-btn
+          color="blue-darken-1"
+          variant="flat"
+          @click="deleteItemConfirm"
+          :loading="loading"
+          >Remove</v-btn
+        >
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
 </template>
 
 <script setup>
-import { computed } from "vue";
+import { computed, ref } from "vue";
+import commaSeparator from "@/utils/commaSeparator";
 
 const props = defineProps(["value", "loading"]);
 const emit = defineEmits(["onUpdate", "onAddAmount", "onRemove"]);
+
+const dialogDelete = ref(false);
+
+const deleteItemConfirm = () => {
+  emit("onRemove", props.value.id);
+  dialogDelete.value = false;
+};
 
 const onEmitData = (type) => {
   switch (type) {

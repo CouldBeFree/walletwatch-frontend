@@ -9,8 +9,8 @@ class GoalService {
     return Gateway.put(`/goal/${id}`, goalData);
   }
 
-  static removeGoal(goalData, id) {
-    return Gateway.delete(`/goal/${id}`, goalData);
+  static removeGoal(id) {
+    return Gateway.delete(`/goal/${id}`);
   }
 
   static getSingleGoal(id) {

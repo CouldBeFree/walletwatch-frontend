@@ -3,6 +3,8 @@
     <v-col cols="12" lg="12">
       <GoalsContainer
         @onCreate="createGoal"
+        @onUpdate="onUpdateGoal"
+        @onDelete="onDeleteGoal"
         :value="goals"
         :loading="loading"
       />
@@ -15,7 +17,12 @@ import GoalsContainer from "@/components/GoalsContainer/GoalsContainer.vue";
 import useGoal from "@/composable/useGoal";
 import { onMounted } from "vue";
 
-const { createGoal, loading, getGoals, goals } = useGoal();
+const { createGoal, loading, getGoals, goals, onUpdateGoal, onDeleteGoal } =
+  useGoal();
+
+const removeGoal = (id) => {
+  onDeleteGoal(id);
+};
 
 onMounted(async () => {
   await getGoals();

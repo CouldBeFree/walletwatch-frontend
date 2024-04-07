@@ -14,6 +14,7 @@
       <GoalCard
         @onAddAmount="onAddAmount"
         @onUpdate="onHandleAmount"
+        @onRemove="$emit('onDelete', $event)"
         :value="item"
         :loading="loading"
       />
@@ -121,7 +122,7 @@ const { valid } = useFormStatusHandler();
 const dialog = ref(false);
 const addAmountDialog = ref(false);
 const props = defineProps(["loading", "value"]);
-const emit = defineEmits(["onCreate", "onUpdate"]);
+const emit = defineEmits(["onCreate", "onUpdate", "onDelete"]);
 
 const initialGoalState = {
   id: null,
