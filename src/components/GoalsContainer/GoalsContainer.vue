@@ -11,7 +11,12 @@
   </v-btn>
   <v-row>
     <v-col v-for="item in value" :key="item.id" lg="4" xl="2" xxl="3">
-      <GoalCard :value="item" :loading="loading" />
+      <GoalCard
+        @onAddAmount="onAddAmount"
+        @onUpdate="onHandleAmount"
+        :value="item"
+        :loading="loading"
+      />
     </v-col>
   </v-row>
   <v-dialog v-model="dialog" width="500px">
@@ -72,6 +77,37 @@
       </v-form>
     </v-card>
   </v-dialog>
+  <v-dialog v-model="addAmountDialog" width="500px">
+    <v-card>
+      <v-card-title>{{ goalState.id ? "Edit" : "Create" }}</v-card-title>
+      <v-form @submit.prevent ref="form" v-model="valid" lazy-validation>
+        <v-card-item>
+          <v-text-field
+            v-model="goalState.already_saved"
+            :rules="[(v) => !!v || 'Amount is required']"
+            type="number"
+            label="Add amount"
+            required
+          />
+          <v-card-actions>
+            <v-spacer />
+            <v-btn variant="flat" color="primary" @click="onModalClose">
+              Cancel
+            </v-btn>
+            <v-btn
+              @click="onSubmit"
+              variant="flat"
+              color="primary"
+              type="submit"
+              :loading="loading"
+            >
+              Add amount
+            </v-btn>
+          </v-card-actions>
+        </v-card-item>
+      </v-form>
+    </v-card>
+  </v-dialog>
 </template>
 
 <script setup>
@@ -83,8 +119,9 @@ import GoalCard from "@/components/GoalsContainer/GoalCard.vue";
 
 const { valid } = useFormStatusHandler();
 const dialog = ref(false);
+const addAmountDialog = ref(false);
 const props = defineProps(["loading", "value"]);
-const emit = defineEmits(["onCreate"]);
+const emit = defineEmits(["onCreate", "onUpdate"]);
 
 const initialGoalState = {
   id: null,
@@ -97,14 +134,27 @@ const initialGoalState = {
 
 const goalState = reactive({ ...initialGoalState });
 
+const onAddAmount = (value) => {
+  Object.assign(goalState, { ...value });
+  addAmountDialog.value = true;
+};
+
+const onHandleAmount = (value) => {
+  dialog.value = true;
+  Object.assign(goalState, { ...value });
+};
+
 const resetState = () => {
   Object.assign(goalState, { ...initialGoalState });
 };
 
 const onSubmit = () => {
-  emit("onCreate", goalState);
+  goalState.id
+    ? emit("onUpdate", { ...goalState })
+    : emit("onCreate", { ...goalState });
   resetState();
   dialog.value = false;
+  addAmountDialog.value = false;
 };
 
 const onModalClose = () => {

@@ -26,10 +26,22 @@
     <v-card-actions>
       <v-spacer></v-spacer>
       <div class="action-wrapper">
-        <v-btn variant="flat" color="green" width="full-width" block>
+        <v-btn
+          @click="onEmitData('addAmount')"
+          variant="flat"
+          color="green"
+          width="full-width"
+          block
+        >
           Add saved amount
         </v-btn>
-        <v-btn variant="flat" color="primary" width="full-width" block>
+        <v-btn
+          @click="onEmitData('edit')"
+          variant="flat"
+          color="primary"
+          width="full-width"
+          block
+        >
           Edit
         </v-btn>
         <v-btn variant="flat" color="red" width="full-width" block>
@@ -44,6 +56,18 @@
 import { computed } from "vue";
 
 const props = defineProps(["value", "loading"]);
+const emit = defineEmits(["onUpdate", "onAddAmount", "onRemove"]);
+
+const onEmitData = (type) => {
+  switch (type) {
+    case "addAmount":
+      emit("onAddAmount", { ...props.value });
+      break;
+    case "edit":
+      emit("onUpdate", { ...props.value });
+      break;
+  }
+};
 
 const percent = computed(() => {
   return (

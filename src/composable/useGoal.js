@@ -16,6 +16,20 @@ export default function useGoal() {
     loading.value = false;
   };
 
+  const onUpdateGoal = async (value) => {
+    loading.value = true;
+    try {
+      await GoalService.updateGoal(value, value.id);
+      await getGoals();
+      proxy.publish(FIRE_SNACK, { type: "green", text: "Success" });
+    } catch (e) {
+      const errorMsg = getErrorMessage(e);
+      proxy.publish(FIRE_SNACK, { type: "red", text: errorMsg });
+    } finally {
+      loading.value = false;
+    }
+  };
+
   const createGoal = async (value) => {
     try {
       loading.value = true;
@@ -30,5 +44,5 @@ export default function useGoal() {
     }
   };
 
-  return { createGoal, getGoals, loading, goals };
+  return { createGoal, getGoals, loading, goals, onUpdateGoal };
 }
