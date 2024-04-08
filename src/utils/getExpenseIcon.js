@@ -22,5 +22,7 @@ export default (expenseName) => {
       return "mdi-cast-education";
     case "Shopping":
       return "mdi-shopping-outline";
+    case "Savings":
+      return "mdi-sack-percent"
   }
 };
