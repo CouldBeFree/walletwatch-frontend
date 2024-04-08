@@ -86,18 +86,18 @@ const onCancelDate = () => {
 const isDateSelectorMultiple = computed(() => selectedType.value === "range");
 
 const formattedDay = computed(() => {
-  if (rawSelectedDate.value && typeof rawSelectedDate.value === "string") {
-    return {
-      startDate: formatDate(rawSelectedDate.value),
-      endDate: formatDate(rawSelectedDate.value),
-    };
-  }
   if (rawSelectedDate.value && Array.isArray(rawSelectedDate.value)) {
     return {
       startDate: formatDate(rawSelectedDate.value[0]),
       endDate: formatDate(
         rawSelectedDate.value[rawSelectedDate.value.length - 1],
       ),
+    };
+  }
+  if (rawSelectedDate.value && typeof rawSelectedDate.value === "object") {
+    return {
+      startDate: formatDate(rawSelectedDate.value),
+      endDate: formatDate(rawSelectedDate.value),
     };
   }
   return null;
