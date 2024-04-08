@@ -14,3 +14,8 @@ export const passwordRules = [
 ];
 
 export const amountRules = [(v) => !!v || "Amount is required"];
+
+export const goalNameRules = [
+  (v) => !!v || "Goal is required",
+  (v) => (v && v.length > 4) || "Goal name must be at least 4 characters long",
+];

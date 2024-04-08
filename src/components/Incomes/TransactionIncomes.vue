@@ -110,11 +110,12 @@ const props = defineProps(["data", "userData", "loading"]);
 const emit = defineEmits(["delete", "create", "update"]);
 
 const transformedData = computed(() => {
-  return props.data?.map(el => {
+  return props.data?.map((el) => {
     return {
-      ...el, amount: commaSeparator(el.amount)
-    }
-  })
+      ...el,
+      amount: commaSeparator(el.amount),
+    };
+  });
 });
 
 const initialIncomeState = {
