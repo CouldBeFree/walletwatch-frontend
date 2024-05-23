@@ -12,6 +12,7 @@
       xl="6"
     >
       <div class="mb-6 text-center">
+        <v-btn class="mb-4" color="primary" @click="onRegister">Register</v-btn>
         <DateSelector @selectDate="onDateSelect" />
       </div>
       <div class="mb-6">
@@ -27,6 +28,7 @@
 </template>
 
 <script setup>
+import { Gateway } from "@/settings/axios";
 import { reactive } from "vue";
 import TotalStatistic from "@/components/TotalStatistic/TotalStatistic.vue";
 import DateSelector from "@/components/DateSelector/DateSelector.vue";
@@ -36,13 +38,18 @@ import useTransactionHistory from "@/composable/useTransactionHistory";
 import useExpenseChart from "@/composable/Expenses/useExpenseChart";
 import useIncomeChart from "@/composable/Incomes/useIncomeChart";
 
+import { startRegistration } from "@simplewebauthn/browser";
+import * as webauthnJson from "@github/webauthn-json";
+
 const { getStatistic: expenseValue, getData: getExpenseData } =
   useExpenseChart();
+
 const {
   getStatistic: incomeValue,
   getData: getIncomeData,
   loading: totalLoading,
 } = useIncomeChart();
+
 const {
   history,
   getTransactionHistory,
@@ -50,6 +57,40 @@ const {
 } = useTransactionHistory();
 
 const selectedDate = reactive({});
+
+const onRegister = async () => {
+  const { data } = await Gateway.post('webauth/register');
+  // const { rp, user, challenge, pubKeyCredParams } = data;
+  console.log(data);
+  // rp: PublicKeyCredentialRpEntity;
+  // user: PublicKeyCredentialUserEntityJSON;
+  // challenge: Base64URLString;
+  // pubKeyCredParams: PublicKeyCredentialParameters[];
+  // try {
+  //   const t = await navigator.credentials.create({
+  //     password: data
+  //   });
+  //   console.log('t', t);
+  // } catch (e) {
+  //   console.error(e)
+  // }
+  // console.log('data', data);
+  // try {
+  //   const publicKeyCredential = await webauthnJson.create(data);
+  //   console.log('publicKeyCredential', publicKeyCredential);
+  // } catch (e) {
+  //   console.error(e);
+  // }
+  try {
+    //https://accounts.example.com
+    const res = await startRegistration(data)
+    console.log('res', res);
+  } catch (e) {
+    console.error(e);
+  }
+  // console.log('res', res);
+  // console.log('t', t);
+}
 
 const onDateSelect = (date) => {
   Object.assign(selectedDate, { ...date });
