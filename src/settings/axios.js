@@ -12,14 +12,14 @@ export const Gateway = axios.create({
   },
 });
 
-const onResponse = (response) => {
-  const { authorization } = response.headers;
-  if (authorization) {
-    const token = authorization.replace("Bearer ", "");
-    localStorage.setItem(LOCAL_STORAGE_TOKEN_NAME, token);
-  }
-  return response;
-};
+// const onResponse = (response) => {
+//   const { authorization } = response.headers;
+//   if (authorization) {
+//     const token = authorization.replace("Bearer ", "");
+//     localStorage.setItem(LOCAL_STORAGE_TOKEN_NAME, token);
+//   }
+//   return response;
+// };
 
 const onRequest = (request) => {
   const { url } = request;
@@ -41,4 +41,4 @@ const onResponseError = (error) => {
 };
 
 Gateway.interceptors.request.use(onRequest);
-Gateway.interceptors.response.use(onResponse, onResponseError);
+Gateway.interceptors.response.use((r) => r, onResponseError);

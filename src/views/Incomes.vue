@@ -5,7 +5,8 @@
         <DateSelector @selectDate="onDateSelect" />
       </div>
       <TransactionIncomes
-        :data="getUsersTransactions"
+        :categories="getIncomeCategories"
+        :data="getAllIncomes"
         :userData="getUsersIncomes"
         :loading="transactionIncomesLoading"
         @update="onUpdateUserIncome"
@@ -29,15 +30,14 @@ import DateSelector from "@/components/DateSelector/DateSelector.vue";
 import { onMounted, reactive } from "vue";
 import useDateSelector from "@/composable/useDateSelector";
 
-const { getUsersIncomes } = useUserIncomes();
+const { getUsersIncomes, getAllIncomesFromApi, getIncomeCategories } = useUserIncomes();
 
 const {
-  getUsersTransactions,
+  getAllIncomes,
   loading: transactionIncomesLoading,
   onUpdate,
   onCreate,
   onDelete,
-  onUpdateUserIncomes,
 } = useTransactionIncomes();
 
 const { getData, getStatistic } = useIncomeChart();
@@ -45,33 +45,29 @@ const { getDate } = useDateSelector();
 
 const selectedDate = reactive(getDate("month"));
 
-onMounted(() => {
-  onUpdateUserIncomes(selectedDate);
-});
-
 const onDateSelect = async (value) => {
   Object.assign(selectedDate, { ...value });
-  await onUpdateUserIncomes(value);
+  await getAllIncomesFromApi(value);
   await getData(value);
 };
 
 const onUpdateUserIncome = (value) => {
   onUpdate(value).then(() => {
-    onUpdateUserIncomes(selectedDate);
+    getAllIncomesFromApi(selectedDate);
     getData(selectedDate);
   });
 };
 
 const onCreateUsersIncome = (value) => {
   onCreate(value).then(() => {
-    onUpdateUserIncomes(selectedDate);
+    getAllIncomesFromApi(selectedDate);
     getData(selectedDate);
   });
 };
 
 const onDeleteUserIncomes = (id) => {
   onDelete(id).then(() => {
-    onUpdateUserIncomes(selectedDate);
+    getAllIncomesFromApi(selectedDate);
     getData(selectedDate);
   });
 };

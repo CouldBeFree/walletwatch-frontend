@@ -1,8 +1,13 @@
 import { Gateway } from "@/settings/axios";
 
 class IncomeService {
-  static getAllIncomes() {
-    return Gateway.get("/incomes");
+  static getAllIncomes(date) {
+    return Gateway.get("/incomes", {
+      params: {
+        ...(date && { startDate: date.startDate }),
+        ...(date && { endDate: date.endDate }),
+      },
+    });
   }
 
   static addIncome(data) {
@@ -15,6 +20,10 @@ class IncomeService {
 
   static getUsersIncomes() {
     return Gateway.get("/incomes/mine");
+  }
+
+  static getIncomesCategories() {
+    return Gateway.get('/incomes/categories');
   }
 
   static getAllCreatedIncomes(date) {
@@ -31,15 +40,15 @@ class IncomeService {
   }
 
   static deleteUserIncome(id) {
-    return Gateway.delete(`/operation/income/${id}`);
+    return Gateway.delete(`/incomes/${id}`);
   }
 
   static createTransaction(income) {
-    return Gateway.post("/operation/income", income);
+    return Gateway.post("/incomes", income);
   }
 
   static getStatisticByDate(date) {
-    return Gateway.get("/incomes/user/statistic", {
+    return Gateway.get("/statistic/incomes", {
       params: {
         ...(date && { startDate: date.startDate }),
         ...(date && { endDate: date.endDate }),

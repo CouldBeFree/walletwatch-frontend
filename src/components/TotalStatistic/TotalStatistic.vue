@@ -1,5 +1,5 @@
 <template>
-  <v-card class="pb-6 pt-5" :loading="loading">
+  <v-card class="pb-6 pt-5" :loading="false">
     <p
       class="text-h3 text-center mb-5 text-red-darken-3"
       :class="{

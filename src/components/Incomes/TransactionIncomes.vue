@@ -1,5 +1,5 @@
 <template>
-  <v-data-table :items="transformedData" :headers="headers" :loading="loading">
+  <v-data-table :items="transformedData" :headers="headers" :loading="loading" @update:page="onUpdatePage">
     <template v-slot:top>
       <v-toolbar flat>
         <v-toolbar-title>Transaction Incomes</v-toolbar-title>
@@ -32,9 +32,9 @@
                 <v-select
                   label="Select"
                   v-model="income.income_category_id"
-                  :items="getUsersIncomes"
-                  item-value="id"
-                  item-title="incomes_category_name"
+                  :items="props.categories || []"
+                  item-value="_id"
+                  item-title="name"
                   :rules="[(v) => !!v || 'Income is required']"
                   :placeholder="'Select income'"
                   :persistent-placeholder="'Select income'"
@@ -69,9 +69,7 @@
           width="400"
         >
           <v-card>
-            <v-card-title class="text-h5"
-              >Remove {{ income.incomes_category_name }}?</v-card-title
-            >
+            <v-card-title class="text-h5">Remove {{ income?.income_category?.name }}?</v-card-title>
             <v-card-actions>
               <v-spacer></v-spacer>
               <v-btn color="blue-darken-1" variant="flat" @click="closeDelete"
@@ -99,36 +97,32 @@
 </template>
 
 <script setup>
-import { ref, reactive, watch, computed } from "vue";
+import moment from "moment";
+import {ref, reactive, watch, computed, toRaw} from "vue";
 import { amountRules } from "@/settings/validationRules";
-import { incomesStore } from "@/store/incomes";
-import { storeToRefs } from "pinia";
 import useFormStatusHandler from "@/composable/useFormStatusHandler";
 import commaSeparator from "@/utils/commaSeparator";
 
-const props = defineProps(["data", "userData", "loading"]);
+const props = defineProps(["data", "userData", "loading", "categories"]);
 const emit = defineEmits(["delete", "create", "update"]);
 
 const transformedData = computed(() => {
   return props.data?.map((el) => {
     return {
       ...el,
+      date: moment(el.date).format("YYYY-MM-DD"),
       amount: commaSeparator(el.amount),
     };
   });
 });
 
 const initialIncomeState = {
-  id: null,
+  _id: null,
   amount: null,
   date: null,
-  income_category_id: null,
-  incomes_category_name: null,
+  income_category: null
 };
 
-const store = incomesStore();
-
-const { getUsersIncomes } = storeToRefs(store);
 const { valid } = useFormStatusHandler();
 
 const amountValidation = ref(amountRules);
@@ -136,7 +130,7 @@ const addIncome = ref(false);
 const dialogDelete = ref(false);
 const income = reactive({ ...initialIncomeState });
 const headers = [
-  { title: "Income name", value: "incomes_category_name", sortable: true },
+  { title: "Income name", value: "income_category.name", sortable: true },
   { title: "Amount", value: "amount", sortable: true },
   { title: "Date", value: "date", sortable: true },
   { title: "Actions", key: "actions", sortable: false },
@@ -155,10 +149,7 @@ watch(dialogDelete, (val) => {
 });
 
 const editItem = (item) => {
-  const id = props.userData.find(
-    (el) => el.incomes_category_name === item.incomes_category_name,
-  )?.id;
-  Object.assign(income, { ...item, income_category_id: id });
+  Object.assign(income, { ...item, amount: +item.amount.replace(',', '') });
   addIncome.value = true;
 };
 
@@ -167,7 +158,7 @@ const closeDelete = () => {
 };
 
 const deleteItemConfirm = async () => {
-  emit("delete", income.id);
+  emit("delete", income._id);
   dialogDelete.value = false;
 };
 
@@ -183,13 +174,13 @@ const editedCategoryName = computed(() => {
 
 const onSubmit = async () => {
   if (!valid.value) return;
-  income.id
+  income._id
     ? emit("update", {
         ...income,
         incomes_category_name: editedCategoryName.value,
-        id: income.id,
+        id: income._id,
       })
-    : emit("create", income);
+    : emit("create", { amount: +income.amount, date: income.date, income_category: income.income_category_id });
   Object.assign(income, { ...initialIncomeState });
   addIncome.value = false;
 };

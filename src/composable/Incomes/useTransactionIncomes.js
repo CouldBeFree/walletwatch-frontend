@@ -7,7 +7,7 @@ import getErrorMessage from "@/utils/getErrorMessage";
 
 export default function useTransactionIncomes() {
   const store = incomesStore();
-  const { getUsersTransactions } = storeToRefs(store);
+  const { getAllIncomes } = storeToRefs(store);
 
   const loading = ref(false);
 
@@ -55,13 +55,13 @@ export default function useTransactionIncomes() {
 
   const onUpdateUserIncomes = async (date) => {
     loading.value = true;
-    await store.getUserIncomes(date);
+    // await store.getUserIncomes(date);
     loading.value = false;
   };
 
   return {
     loading,
-    getUsersTransactions,
+    getAllIncomes,
     onUpdate,
     onCreate,
     onDelete,

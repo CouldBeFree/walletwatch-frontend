@@ -39,7 +39,7 @@ class ExpenseService {
   }
 
   static getStatisticByDate(date) {
-    return Gateway.get("/expenses/user/statistic", {
+    return Gateway.get("/statistic/expense", {
       params: {
         ...(date && { startDate: date.startDate }),
         ...(date && { endDate: date.endDate }),

@@ -46,7 +46,7 @@ import AuthService from "@/service/apiService/AuthService";
 import router from "@/router";
 import getErrorMessage from "@/utils/getErrorMessage";
 import useFormStatusHandler from "@/composable/useFormStatusHandler";
-import { TEXT_TYPE, PASSWORD_TYPE } from "@/constants";
+import { TEXT_TYPE, PASSWORD_TYPE, LOCAL_STORAGE_TOKEN_NAME } from "@/constants";
 
 const emailValidation = ref(emailRules);
 const passwordValidation = ref(passwordRules);
@@ -76,7 +76,8 @@ const submit = async () => {
   if (!valid.value) return;
   try {
     loading.value = true;
-    await AuthService.loginUser(user);
+    const { data } = await AuthService.loginUser(user);
+    localStorage.setItem(LOCAL_STORAGE_TOKEN_NAME, data.token);
     error.value = null;
     await router.push("/dashboard");
   } catch (e) {

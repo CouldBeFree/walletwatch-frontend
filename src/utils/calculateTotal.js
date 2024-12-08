@@ -1,7 +1,7 @@
 export default (arr = []) => {
   let count = 0;
   arr?.forEach((item) => {
-    count += item.amount_sum;
+    count += item.totalAmount;
   });
   return count;
 };

@@ -12,12 +12,11 @@
       xl="6"
     >
       <div class="mb-6 text-center">
-        <v-btn class="mb-4" color="primary" @click="onRegister">Register</v-btn>
         <DateSelector @selectDate="onDateSelect" />
       </div>
-      <div class="mb-6">
-        <TransactionHistory :value="history" :loading="transactionLoading" />
-      </div>
+<!--      <div class="mb-6">-->
+<!--        <TransactionHistory :value="history" :loading="transactionLoading" />-->
+<!--      </div>-->
       <TotalStatistic
         :expenseValue="expenseValue"
         :incomeValue="incomeValue"
@@ -57,40 +56,6 @@ const {
 } = useTransactionHistory();
 
 const selectedDate = reactive({});
-
-const onRegister = async () => {
-  const { data } = await Gateway.post('webauth/register');
-  // const { rp, user, challenge, pubKeyCredParams } = data;
-  console.log(data);
-  // rp: PublicKeyCredentialRpEntity;
-  // user: PublicKeyCredentialUserEntityJSON;
-  // challenge: Base64URLString;
-  // pubKeyCredParams: PublicKeyCredentialParameters[];
-  // try {
-  //   const t = await navigator.credentials.create({
-  //     password: data
-  //   });
-  //   console.log('t', t);
-  // } catch (e) {
-  //   console.error(e)
-  // }
-  // console.log('data', data);
-  // try {
-  //   const publicKeyCredential = await webauthnJson.create(data);
-  //   console.log('publicKeyCredential', publicKeyCredential);
-  // } catch (e) {
-  //   console.error(e);
-  // }
-  try {
-    //https://accounts.example.com
-    const res = await startRegistration(data)
-    console.log('res', res);
-  } catch (e) {
-    console.error(e);
-  }
-  // console.log('res', res);
-  // console.log('t', t);
-}
 
 const onDateSelect = (date) => {
   Object.assign(selectedDate, { ...date });

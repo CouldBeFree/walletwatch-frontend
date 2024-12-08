@@ -7,8 +7,12 @@ export const incomesStore = defineStore("incomes", {
     allIncomes: [],
     usersTransactions: [],
     statistic: [],
+    userIncomeCategories: []
   }),
   getters: {
+    getIncomeCategories: (state) => {
+      return state.userIncomeCategories;
+    },
     getUsersIncomes: (state) => {
       return state.usersIncomes;
     },
@@ -23,12 +27,16 @@ export const incomesStore = defineStore("incomes", {
     },
   },
   actions: {
+    async getIncomesCategoriesFromApi() {
+      const { data } = await IncomeService.getIncomesCategories();
+      this.userIncomeCategories = data;
+    },
     async getUsersIncomesFromApi() {
       const { data } = await IncomeService.getUsersIncomes();
       this.usersIncomes = data;
     },
-    async getAllIncomesFromApi() {
-      const { data } = await IncomeService.getAllIncomes();
+    async getAllIncomesFromApi(date) {
+      const { data } = await IncomeService.getAllIncomes(date);
       this.allIncomes = data;
     },
     async removeCategoryIncome(id) {

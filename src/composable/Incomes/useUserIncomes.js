@@ -4,17 +4,20 @@ import { storeToRefs } from "pinia";
 import proxy from "@/utils/proxy";
 import { FIRE_SNACK } from "@/constants";
 import getErrorMessage from "@/utils/getErrorMessage";
+import useDateSelector from "@/composable/useDateSelector";
 
 export default function useUserIncomes() {
   const store = incomesStore();
-  const { getUsersIncomes, getAllIncomes } = storeToRefs(store);
+  const { getUsersIncomes, getAllIncomes, getIncomeCategories } = storeToRefs(store);
+  const { getAllIncomesFromApi, getIncomesCategoriesFromApi } = store;
+  const { getDate } = useDateSelector();
 
   const loading = ref(false);
 
   onMounted(async () => {
     loading.value = true;
-    await store.getUsersIncomesFromApi();
-    await store.getAllIncomesFromApi();
+    await getIncomesCategoriesFromApi();
+    await getAllIncomesFromApi(getDate("month"));
     loading.value = false;
   });
 
@@ -53,5 +56,7 @@ export default function useUserIncomes() {
     getAllIncomes,
     onDeleteIncomes,
     onCreateIncome,
+    getAllIncomesFromApi,
+    getIncomeCategories
   };
 }
