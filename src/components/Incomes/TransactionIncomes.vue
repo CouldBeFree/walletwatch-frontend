@@ -12,7 +12,7 @@
             </v-btn>
           </template>
           <v-card>
-            <v-card-title>{{ income.id ? "Edit" : "Create" }}</v-card-title>
+            <v-card-title>{{ income._id ? "Edit" : "Create" }}</v-card-title>
             <v-form @submit.prevent ref="form" v-model="valid" lazy-validation>
               <v-card-item>
                 <v-text-field
@@ -29,9 +29,10 @@
                   :rules="[(v) => !!v || 'Date is required']"
                   required
                 />
+                {{ income }}
                 <v-select
                   label="Select"
-                  v-model="income.income_category_id"
+                  v-model="income.income_category"
                   :items="props.categories || []"
                   item-value="_id"
                   item-title="name"
@@ -55,7 +56,7 @@
                     type="submit"
                     :loading="loading"
                   >
-                    {{ income.id ? "Edit" : "Create" }}
+                    {{ income._id ? "Edit" : "Create" }}
                   </v-btn>
                 </v-card-actions>
               </v-card-item>
@@ -73,14 +74,16 @@
             <v-card-actions>
               <v-spacer></v-spacer>
               <v-btn color="blue-darken-1" variant="flat" @click="closeDelete"
-                >Cancel</v-btn
+              >Cancel
+              </v-btn
               >
               <v-btn
                 color="blue-darken-1"
                 variant="flat"
                 @click="deleteItemConfirm"
                 :loading="loading"
-                >Remove</v-btn
+              >Remove
+              </v-btn
               >
             </v-card-actions>
           </v-card>
@@ -91,15 +94,15 @@
       <v-icon size="small" class="me-2" @click="editItem(item)">
         mdi-pencil
       </v-icon>
-      <v-icon size="small" @click="deleteItem(item)"> mdi-delete </v-icon>
+      <v-icon size="small" @click="deleteItem(item)"> mdi-delete</v-icon>
     </template>
   </v-data-table>
 </template>
 
 <script setup>
 import moment from "moment";
-import {ref, reactive, watch, computed, toRaw} from "vue";
-import { amountRules } from "@/settings/validationRules";
+import {ref, reactive, watch, computed} from "vue";
+import {amountRules} from "@/settings/validationRules";
 import useFormStatusHandler from "@/composable/useFormStatusHandler";
 import commaSeparator from "@/utils/commaSeparator";
 
@@ -123,33 +126,38 @@ const initialIncomeState = {
   income_category: null
 };
 
-const { valid } = useFormStatusHandler();
+const {valid} = useFormStatusHandler();
 
 const amountValidation = ref(amountRules);
 const addIncome = ref(false);
 const dialogDelete = ref(false);
-const income = reactive({ ...initialIncomeState });
+const income = reactive({...initialIncomeState});
 const headers = [
-  { title: "Income name", value: "income_category.name", sortable: true },
-  { title: "Amount", value: "amount", sortable: true },
-  { title: "Date", value: "date", sortable: true },
-  { title: "Actions", key: "actions", sortable: false },
+  {title: "Income name", value: "income_category.name", sortable: true},
+  {title: "Amount", value: "amount", sortable: true},
+  {title: "Date", value: "date", sortable: true},
+  {title: "Actions", key: "actions", sortable: false},
 ];
 
 watch(addIncome, (val) => {
   if (!val) {
-    Object.assign(income, { ...initialIncomeState });
+    Object.assign(income, {...initialIncomeState});
   }
 });
 
 watch(dialogDelete, (val) => {
   if (!val) {
-    Object.assign(income, { ...initialIncomeState });
+    Object.assign(income, {...initialIncomeState});
   }
 });
 
 const editItem = (item) => {
-  Object.assign(income, { ...item, amount: +item.amount.replace(',', '') });
+  const copyValue = JSON.parse(JSON.stringify(item));
+  Object.assign(income, {
+    ...copyValue,
+    amount: +copyValue.amount.replace(',', ''),
+    income_category: copyValue.income_category._id
+  });
   addIncome.value = true;
 };
 
@@ -164,24 +172,20 @@ const deleteItemConfirm = async () => {
 
 const deleteItem = (item) => {
   dialogDelete.value = true;
-  Object.assign(income, { ...item });
+  Object.assign(income, {...item});
 };
-
-const editedCategoryName = computed(() => {
-  return props.userData.find((el) => el.id === income.income_category_id)
-    ?.incomes_category_name;
-});
 
 const onSubmit = async () => {
   if (!valid.value) return;
   income._id
     ? emit("update", {
-        ...income,
-        incomes_category_name: editedCategoryName.value,
-        id: income._id,
-      })
-    : emit("create", { amount: +income.amount, date: income.date, income_category: income.income_category_id });
-  Object.assign(income, { ...initialIncomeState });
+      ...income,
+      income_category: income.income_category,
+      id: income._id,
+      amount: +income.amount
+    })
+    : emit("create", {amount: +income.amount, date: income.date, income_category: income.income_category});
+  Object.assign(income, {...initialIncomeState});
   addIncome.value = false;
 };
 </script>

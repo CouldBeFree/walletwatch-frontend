@@ -36,7 +36,7 @@ class IncomeService {
   }
 
   static updateIncome(income, id) {
-    return Gateway.put(`/operation/income/${id}`, income);
+    return Gateway.put(`/incomes/${id}`, income);
   }
 
   static deleteUserIncome(id) {
