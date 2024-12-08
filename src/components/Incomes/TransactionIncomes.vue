@@ -29,7 +29,6 @@
                   :rules="[(v) => !!v || 'Date is required']"
                   required
                 />
-                {{ income }}
                 <v-select
                   label="Select"
                   v-model="income.income_category"
