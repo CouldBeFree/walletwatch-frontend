@@ -1,5 +1,5 @@
 <template>
-  <v-data-table :items="transformedData" :headers="headers" :loading="loading" @update:page="onUpdatePage">
+  <v-data-table :items="transformedData" :headers="headers" :loading="loading">
     <template v-slot:top>
       <v-toolbar flat>
         <v-toolbar-title>Transaction Incomes</v-toolbar-title>

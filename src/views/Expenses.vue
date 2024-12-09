@@ -5,9 +5,9 @@
         <DateSelector @selectDate="onDateSelect" />
       </div>
       <TransactionExpenses
-        :data="getUsersTransactions"
-        :userData="getUsersExpenses"
-        :loading="transactionLoading"
+        :data="getAllExpenses"
+        :categories="getUserExpenseCategories"
+        :loading="loading"
         @update="onUpdateUsersExpense"
         @create="onCreateUsersExpense"
         @delete="onDeleteUsersExpense"
@@ -23,22 +23,12 @@
 import ExpenseChartStatistic from "@/components/Expenses/ExpenseChartStatistic.vue";
 import TransactionExpenses from "@/components/Expenses/TransactionExpenses.vue";
 import useUserExpenses from "@/composable/Expenses/useUserExpenses";
-import useTransactionExpenses from "@/composable/Expenses/useTransactionExpenses";
 import useExpenseChart from "@/composable/Expenses/useExpenseChart";
 import DateSelector from "@/components/DateSelector/DateSelector.vue";
 import { onMounted, reactive } from "vue";
 import useDateSelector from "@/composable/useDateSelector";
 
-const { getUsersExpenses } = useUserExpenses();
-
-const {
-  getUsersTransactions,
-  onUpdate,
-  onCreate,
-  onDelete,
-  updateTransactionExpenses,
-  loading: transactionLoading,
-} = useTransactionExpenses();
+const { getUserExpenseCategories, getAllExpenses, getLoading: loading, getUserTransactions, onCreateExpense, onDeleteExpense, onUpdateExpense } = useUserExpenses();
 
 const { getStatistic, getData } = useExpenseChart();
 const { getDate } = useDateSelector();
@@ -46,34 +36,32 @@ const { getDate } = useDateSelector();
 const selectedDate = reactive(getDate("month"));
 
 onMounted(() => {
-  updateTransactionExpenses(selectedDate);
+  getUserTransactions(selectedDate);
 });
+
+const updateData = async (date) => {
+  await getUserTransactions(date);
+  await getData(date);
+}
 
 const onDateSelect = async (value) => {
   Object.assign(selectedDate, { ...value });
-  await updateTransactionExpenses(value);
-  await getData(value);
+  await updateData(value);
+};
+
+const onDeleteUsersExpense = async (id) => {
+  await onDeleteExpense(id);
+  await updateData(selectedDate);
+};
+
+const onCreateUsersExpense = async (value) => {
+  await onCreateExpense(value);
+  await updateData(selectedDate);
 };
 
 const onUpdateUsersExpense = async (value) => {
-  onUpdate(value).then(() => {
-    updateTransactionExpenses(selectedDate);
-    getData(selectedDate);
-  });
-};
-
-const onCreateUsersExpense = (value) => {
-  onCreate(value).then(() => {
-    updateTransactionExpenses(selectedDate);
-    getData(selectedDate);
-  });
-};
-
-const onDeleteUsersExpense = (id) => {
-  onDelete(id).then(() => {
-    updateTransactionExpenses(selectedDate);
-    getData(selectedDate);
-  });
+  await onUpdateExpense(value);
+  await updateData(selectedDate);
 };
 </script>
 

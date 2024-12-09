@@ -1,4 +1,4 @@
-import { onMounted, ref } from "vue";
+import { onMounted } from "vue";
 import { expensesStore } from "@/store/expenses";
 import { storeToRefs } from "pinia";
 import proxy from "@/utils/proxy";
@@ -7,51 +7,53 @@ import getErrorMessage from "@/utils/getErrorMessage";
 
 export default function useUserExpenses() {
   const store = expensesStore();
-  const { getUsersExpenses, getAllExpenses } = storeToRefs(store);
-
-  const loading = ref(false);
+  const { getAllExpenses, getUserExpenseCategories, getLoading } = storeToRefs(store);
+  const { getCategories, removeCategoryExpense, createUserTransaction, getUserTransactions, updateUserTransaction } = store;
 
   onMounted(async () => {
-    loading.value = true;
-    await store.getUsersExpensesFromApi();
-    await store.getAllExpensesFromApi();
-    loading.value = false;
+    await getCategories();
   });
 
-  const onDeleteExpense = async (id) => {
-    loading.value = true;
+  const onUpdateExpense = async (item) => {
     try {
-      await store.removeCategoryExpense(id);
-      await store.getUsersExpensesFromApi();
+      await updateUserTransaction(item);
       proxy.publish(FIRE_SNACK, { type: "green", text: "Success" });
     } catch (e) {
       const errorMsg = getErrorMessage(e);
       proxy.publish(FIRE_SNACK, { type: "red", text: errorMsg });
-    } finally {
-      loading.value = false;
+      throw new Error(e);
+    }
+  }
+
+  const onDeleteExpense = async (id) => {
+    try {
+      await removeCategoryExpense(id);
+      proxy.publish(FIRE_SNACK, { type: "green", text: "Success" });
+    } catch (e) {
+      const errorMsg = getErrorMessage(e);
+      proxy.publish(FIRE_SNACK, { type: "red", text: errorMsg });
+      throw new Error(e);
     }
   };
 
-  const onCreateExpense = async (ids) => {
-    const promises = ids.map((id) => store.createExpense(id));
-    loading.value = true;
+  const onCreateExpense = async (expense) => {
     try {
-      await Promise.all(promises);
-      await store.getUsersExpensesFromApi();
+      await createUserTransaction(expense);
       proxy.publish(FIRE_SNACK, { type: "green", text: "Success" });
     } catch (e) {
       const errorMsg = getErrorMessage(e);
       proxy.publish(FIRE_SNACK, { type: "red", text: errorMsg });
-    } finally {
-      loading.value = false;
+      throw new Error(e);
     }
   };
 
   return {
-    getUsersExpenses,
-    getAllExpenses,
+    getUserTransactions,
+    onUpdateExpense,
     onCreateExpense,
     onDeleteExpense,
-    loading,
+    getUserExpenseCategories,
+    getAllExpenses,
+    getLoading,
   };
 }

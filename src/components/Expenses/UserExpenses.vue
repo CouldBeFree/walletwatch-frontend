@@ -6,7 +6,7 @@
         type="heading, divider, list-item-three-line, divider, list-item-three-line, divider, button"
       ></v-skeleton-loader>
     </template>
-    <template v-slot:text v-if="userData.length">
+    <template v-slot:text v-if="userData?.length">
       <v-table>
         <thead>
           <tr>

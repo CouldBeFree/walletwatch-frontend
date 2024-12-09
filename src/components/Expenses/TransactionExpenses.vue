@@ -12,7 +12,7 @@
             </v-btn>
           </template>
           <v-card>
-            <v-card-title>{{ expense.id ? "Edit" : "Create" }}</v-card-title>
+            <v-card-title>{{ expense._id ? "Edit" : "Create" }}</v-card-title>
             <v-form @submit.prevent ref="form" v-model="valid" lazy-validation>
               <v-card-item>
                 <v-text-field
@@ -31,10 +31,10 @@
                 />
                 <v-select
                   label="Select"
-                  v-model="expense.expense_category_id"
-                  :items="getUsersExpenses"
-                  item-value="id"
-                  item-title="expenses_category_name"
+                  v-model="expense.expense_category"
+                  :items="categories"
+                  item-value="_id"
+                  item-title="name"
                   :rules="[(v) => !!v || 'Expense is required']"
                   :placeholder="'Select expense'"
                   :persistent-placeholder="'Select expense'"
@@ -55,7 +55,7 @@
                     type="submit"
                     :loading="loading"
                   >
-                    {{ expense.id ? "Edit" : "Create" }}
+                    {{ expense._id ? "Edit" : "Create" }}
                   </v-btn>
                 </v-card-actions>
               </v-card-item>
@@ -70,7 +70,7 @@
         >
           <v-card>
             <v-card-title class="text-h5"
-              >Remove {{ expense.expenses_category_name }}?</v-card-title
+              >Remove {{ expense?.expense_category?.name }}?</v-card-title
             >
             <v-card-actions>
               <v-spacer></v-spacer>
@@ -99,36 +99,32 @@
 </template>
 
 <script setup>
+import moment from "moment";
 import { ref, reactive, watch, computed } from "vue";
 import { amountRules } from "@/settings/validationRules";
-import { expensesStore } from "@/store/expenses";
-import { storeToRefs } from "pinia";
 import commaSeparator from "@/utils/commaSeparator";
 import useFormStatusHandler from "@/composable/useFormStatusHandler";
 
-const props = defineProps(["data", "userData", "loading"]);
+const props = defineProps(["data", "loading", "categories"]);
 const emit = defineEmits(["delete", "create", "update"]);
 
 const transformedData = computed(() => {
   return props.data?.map((el) => {
     return {
       ...el,
+      date: moment(el.date).format("YYYY-MM-DD"),
       amount: commaSeparator(el.amount),
     };
   });
 });
 
 const initialExpenseState = {
-  id: null,
+  _id: null,
   amount: null,
   date: null,
-  expense_category_id: null,
-  expense_category_name: null,
+  expense_category: null,
 };
 
-const store = expensesStore();
-
-const { getUsersExpenses } = storeToRefs(store);
 const { valid } = useFormStatusHandler();
 
 const amountValidation = ref(amountRules);
@@ -136,7 +132,7 @@ const addExpense = ref(false);
 const dialogDelete = ref(false);
 const expense = reactive({ ...initialExpenseState });
 const headers = [
-  { title: "Expense name", value: "expenses_category_name", sortable: true },
+  { title: "Expense name", value: "expense_category.name", sortable: true },
   { title: "Amount", value: "amount", sortable: true },
   { title: "Date", value: "date", sortable: true },
   { title: "Actions", key: "actions", sortable: false },
@@ -155,10 +151,12 @@ watch(dialogDelete, (val) => {
 });
 
 const editItem = (item) => {
-  const id = props.userData.find(
-    (el) => el.expenses_category_name === item.expenses_category_name,
-  )?.id;
-  Object.assign(expense, { ...item, expense_category_id: id });
+  const copyValue = JSON.parse(JSON.stringify(item));
+  Object.assign(expense, {
+    ...copyValue,
+    amount: +copyValue.amount.replace(',', ''),
+    expense_category: copyValue.expense_category._id
+  });
   addExpense.value = true;
 };
 
@@ -167,29 +165,26 @@ const closeDelete = () => {
 };
 
 const deleteItemConfirm = async () => {
-  emit("delete", expense.id);
+  emit("delete", expense._id);
   dialogDelete.value = false;
 };
 
 const deleteItem = (item) => {
   dialogDelete.value = true;
+  console.log(item);
   Object.assign(expense, { ...item });
 };
 
-const editedCategoryName = computed(() => {
-  return props.userData.find((el) => el.id === expense.expense_category_id)
-    ?.expenses_category_name;
-});
-
 const onSubmit = async () => {
   if (!valid.value) return;
-  expense.id
+  expense._id
     ? emit("update", {
         ...expense,
-        expenses_category_name: editedCategoryName.value,
-        id: expense.id,
+        expense_category: expense.expense_category,
+        id: expense._id,
+        amount: +expense.amount
       })
-    : emit("create", expense);
+    : emit("create", {amount: +expense.amount, date: expense.date, expense_category: expense.expense_category});
   Object.assign(expense, { ...initialExpenseState });
   addExpense.value = false;
 };

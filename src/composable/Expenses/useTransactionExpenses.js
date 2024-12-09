@@ -1,5 +1,5 @@
 import { expensesStore } from "@/store/expenses";
-import { onMounted, ref } from "vue";
+import {onMounted, ref} from "vue";
 import { storeToRefs } from "pinia";
 import proxy from "@/utils/proxy";
 import { FIRE_SNACK } from "@/constants";
@@ -10,6 +10,10 @@ export default function useTransactionExpenses() {
   const { getUsersTransactions } = storeToRefs(store);
 
   const loading = ref(false);
+
+  onMounted( () => {
+    // getCategories();
+  })
 
   const onUpdate = async (val) => {
     loading.value = true;
@@ -53,7 +57,7 @@ export default function useTransactionExpenses() {
     }
   };
 
-  const updateTransactionExpenses = async (date) => {
+  const getAllExpenses = async (date) => {
     loading.value = true;
     await store.getUserTransactions(date);
     loading.value = false;
@@ -64,6 +68,6 @@ export default function useTransactionExpenses() {
     onUpdate,
     onCreate,
     onDelete,
-    updateTransactionExpenses,
+    getAllExpenses,
   };
 }
