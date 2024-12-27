@@ -1,21 +1,21 @@
 export const nameRules = [
-  (v) => !!v || "Name is required",
-  (v) => (v && v.length >= 4) || "Name must be less than 4 characters",
+  (v) => !!v || "Введіть ім'я",
+  (v) => (v && v.length >= 4) || "Ім'я не має бути коротшим за 4 символи",
 ];
 
 export const emailRules = [
-  (v) => !!v || "E-mail is required",
-  (v) => /.+@.+\..+/.test(v) || "E-mail must be valid",
+  (v) => !!v || "Введіть імейл",
+  (v) => /.+@.+\..+/.test(v) || "Імейл не валідний",
 ];
 
 export const passwordRules = [
-  (v) => !!v || "Password is required",
-  (v) => v.length > 4 || "Password should be at least 4 characters long",
+  (v) => !!v || "Введіть пароль",
+  (v) => v.length > 4 || "Пароль має містити мінімум 4",
 ];
 
-export const amountRules = [(v) => !!v || "Amount is required"];
+export const amountRules = [(v) => !!v || "Введіть суму"];
 
 export const goalNameRules = [
-  (v) => !!v || "Goal is required",
-  (v) => (v && v.length > 4) || "Goal name must be at least 4 characters long",
+  (v) => !!v || "Введіть ціль",
+  (v) => (v && v.length > 4) || "Ім'я не має бути коротшим за 4 символи",
 ];

@@ -17,7 +17,7 @@
           exact
           :to="'/dashboard'"
           prepend-icon="mdi-home-analytics"
-          title="Home"
+          title="Головна"
           value="Home"
         ></v-list-item>
         <v-list-item
@@ -25,7 +25,7 @@
           exact
           :to="'/dashboard/incomes'"
           prepend-icon="mdi-cash-fast"
-          title="Incomes"
+          title="Дохід"
           value="Incomes"
         ></v-list-item>
         <v-list-item
@@ -33,7 +33,7 @@
           exact
           :to="'/dashboard/expenses'"
           prepend-icon="mdi-transfer"
-          title="Expenses"
+          title="Витрати"
           value="Expenses"
         ></v-list-item>
 <!--        <v-list-item-->
@@ -60,13 +60,13 @@
         <v-list-item
           @click="onToggle"
           prepend-icon="mdi-theme-light-dark"
-          title="Switch theme"
+          title="Переключити тему"
           value="Logout"
         ></v-list-item>
         <v-list-item
           @click="onLogout"
           prepend-icon="mdi-exit-to-app"
-          title="Logout"
+          title="Вийти"
           value="Switch theme"
         ></v-list-item>
       </v-list>

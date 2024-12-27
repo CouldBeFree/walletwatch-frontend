@@ -10,8 +10,8 @@
       <v-table>
         <thead>
           <tr>
-            <th class="text-left">Income name</th>
-            <th class="text-right">Action</th>
+            <th class="text-left">Назва доходу</th>
+            <th class="text-right">Дія</th>
           </tr>
         </thead>
         <tbody>
@@ -70,7 +70,7 @@
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn @click="userIncomeClose" variant="flat" color="primary">
-          Close
+          Закрити
         </v-btn>
         <v-btn
           @click="onSave"
@@ -79,7 +79,7 @@
           :disabled="!selectedIds.length"
           :loading="loading"
         >
-          Save
+          Зберегти
         </v-btn>
       </v-card-actions>
     </v-card>
@@ -87,18 +87,18 @@
   <v-dialog v-model="removeDialog" scrollable width="400" max-width="600">
     <v-card>
       <v-card-title class="text-h5">
-        Remove {{ selectedIncome.val?.incomes_category_name }} income?
+        Видалити {{ selectedIncome.val?.incomes_category_name }} дохід?
       </v-card-title>
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn variant="flat" color="primary" @click="onCancel"> Cancel </v-btn>
+        <v-btn variant="flat" color="primary" @click="onCancel"> Відмінити </v-btn>
         <v-btn
           variant="flat"
           color="primary"
           @click="onRemove"
           :loading="loading"
         >
-          Remove
+          Видалити
         </v-btn>
       </v-card-actions>
     </v-card>

@@ -2,31 +2,31 @@
   <v-data-table :items="transformedData" :headers="headers" :loading="loading">
     <template v-slot:top>
       <v-toolbar flat>
-        <v-toolbar-title>Transaction Expenses</v-toolbar-title>
+        <v-toolbar-title>Витрати</v-toolbar-title>
         <v-divider class="mx-4" inset vertical></v-divider>
         <v-spacer></v-spacer>
         <v-dialog v-model="addExpense" max-width="500px">
           <template v-slot:activator="{ props }">
             <v-btn color="primary" dark class="mb-2" v-bind="props">
-              New Item
+              Створити витрату
             </v-btn>
           </template>
           <v-card>
-            <v-card-title>{{ expense._id ? "Edit" : "Create" }}</v-card-title>
+            <v-card-title>{{ expense._id ? "Редагувати" : "Створити" }}</v-card-title>
             <v-form @submit.prevent ref="form" v-model="valid" lazy-validation>
               <v-card-item>
                 <v-text-field
                   v-model="expense.amount"
                   :rules="amountValidation"
                   required
-                  label="Amount"
+                  label="Сума"
                   type="number"
                   prefix="₴"
                 />
                 <v-text-field
                   v-model="expense.date"
                   type="date"
-                  :rules="[(v) => !!v || 'Date is required']"
+                  :rules="[(v) => !!v || 'Введіть дату']"
                   required
                 />
                 <v-select
@@ -35,9 +35,9 @@
                   :items="categories"
                   item-value="_id"
                   item-title="name"
-                  :rules="[(v) => !!v || 'Expense is required']"
-                  :placeholder="'Select expense'"
-                  :persistent-placeholder="'Select expense'"
+                  :rules="[(v) => !!v || 'Введіть витрату']"
+                  :placeholder="'Виберіть витрату'"
+                  :persistent-placeholder="'Виберіть витрату'"
                 ></v-select>
                 <v-card-actions>
                   <v-spacer></v-spacer>
@@ -46,7 +46,7 @@
                     color="primary"
                     @click="addExpense = false"
                   >
-                    Cancel
+                    Відмінити
                   </v-btn>
                   <v-btn
                     @click="onSubmit"
@@ -55,7 +55,7 @@
                     type="submit"
                     :loading="loading"
                   >
-                    {{ expense._id ? "Edit" : "Create" }}
+                    {{ expense._id ? "Редагувати" : "Сворити" }}
                   </v-btn>
                 </v-card-actions>
               </v-card-item>
@@ -70,19 +70,19 @@
         >
           <v-card>
             <v-card-title class="text-h5"
-              >Remove {{ expense?.expense_category?.name }}?</v-card-title
+              >Видалити {{ expense?.expense_category?.name }}?</v-card-title
             >
             <v-card-actions>
               <v-spacer></v-spacer>
               <v-btn color="blue-darken-1" variant="flat" @click="closeDelete"
-                >Cancel</v-btn
+                >Відмінити</v-btn
               >
               <v-btn
                 color="blue-darken-1"
                 variant="flat"
                 @click="deleteItemConfirm"
                 :loading="loading"
-                >Remove</v-btn
+                >Видалити</v-btn
               >
             </v-card-actions>
           </v-card>
@@ -132,10 +132,10 @@ const addExpense = ref(false);
 const dialogDelete = ref(false);
 const expense = reactive({ ...initialExpenseState });
 const headers = [
-  { title: "Expense name", value: "expense_category.name", sortable: true },
-  { title: "Amount", value: "amount", sortable: true },
-  { title: "Date", value: "date", sortable: true },
-  { title: "Actions", key: "actions", sortable: false },
+  { title: "Назва витрат", value: "expense_category.name", sortable: true },
+  { title: "Сума", value: "amount", sortable: true },
+  { title: "Дата", value: "date", sortable: true },
+  { title: "Дія", key: "actions", sortable: false },
 ];
 
 watch(addExpense, (val) => {

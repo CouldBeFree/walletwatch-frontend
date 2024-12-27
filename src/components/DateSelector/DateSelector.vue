@@ -47,31 +47,31 @@ const emit = defineEmits(["selectDate"]);
 const filters = [
   {
     type: "month",
-    text: "Month",
+    text: "Місяць",
   },
   {
     type: "allTime",
-    text: "All time",
+    text: "Весь час",
   },
   {
     type: "day",
-    text: "Choose day",
+    text: "Обрати день",
   },
   {
     type: "week",
-    text: "Week",
+    text: "Тиждень",
   },
   {
     type: "today",
-    text: "Today",
+    text: "Сьогодні",
   },
   {
     type: "year",
-    text: "Year",
+    text: "Рік",
   },
   {
     type: "range",
-    text: "Date range",
+    text: "Діапазон дат",
   },
 ];
 const selectedType = ref("month");

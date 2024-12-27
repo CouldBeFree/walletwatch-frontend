@@ -7,7 +7,7 @@
         'text-green-darken-3': total >= 0,
       }"
     >
-      Overall {{ commaSeparator(total) }} ₴
+      Підсумок {{ commaSeparator(total) }} ₴
     </p>
     <v-row align="start">
       <v-col cols="12" xs="12" sm="12" md="6" lg="6">

@@ -1,17 +1,17 @@
 <template>
-  <p class="text-h3 text-center mb-6">Welcome back</p>
+  <p class="text-h3 text-center mb-6">З поверненням!</p>
   <v-form ref="form" v-model="valid" lazy-validation @submit.prevent>
     <v-text-field
       v-model="user.email"
       :rules="emailValidation"
-      label="E-mail"
+      label="Імейл"
       required
     ></v-text-field>
 
     <v-text-field
       v-model="user.password"
       :rules="passwordValidation"
-      label="Password"
+      label="Пароль"
       :append-icon="icon"
       required
       :type="passwordFieldType"
@@ -26,10 +26,10 @@
         :disabled="loading"
         :loading="loading"
       >
-        Login
+        Увійти
       </v-btn>
       <p class="mt-2 d-flex justify-end">
-        <router-link to="/auth/registration">I don't have account</router-link>
+        <router-link to="/auth/registration">У мене немає акаунту</router-link>
       </p>
     </div>
     <v-alert v-if="error" class="mt-5 text-capitalize" type="error">{{

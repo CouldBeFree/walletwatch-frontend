@@ -9,20 +9,21 @@ export const FIRE_SNACK = "fire_snack";
 export const CURRENCY = [{ name: "usd" }, { name: "uah" }];
 
 export const EXPENSE_COLORS = {
-  "Self education": '#22c959',
-  "Car": '#c1c41d',
-  "Pets": '#4217d1',
-  "Grocery": '#e09421',
-  "Utilities": '#ed0e7d',
-  "Rent": '#539bd6',
-  "Donates": '#1377db',
-  "Cafe and restaurants": '#b21edb',
-  "Credits payment": '#1ec8db'
+  "Самоосвіта": '#22c959',
+  "Машина": '#c1c41d',
+  "Домашні улюбленці": '#4217d1',
+  "Продукти": '#e09421',
+  "Комуналка": '#ed0e7d',
+  "Оренда": '#539bd6',
+  "Донати": '#1377db',
+  "Кафешка": '#b21edb',
+  "Кредит": '#1ec8db',
+  "Медицина": '#ffff00'
 }
 
 export const INCOME_COLORS = {
-  "Salary": '#237a74',
-  "Freelance": '#19e553',
-  "Dividents": '#19b2e5',
-  "Enterprise income": '#e5c619'
+  "Заробітна плата": '#237a74',
+  "Фріланс": '#19e553',
+  "Дивиденти": '#19b2e5',
+  "Додатковий дохід": '#e5c619'
 }

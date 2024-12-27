@@ -1,24 +1,24 @@
 export default (expenseName) => {
   switch (expenseName) {
-    case "Vehicle":
+    case "Машина":
       return "mdi-car-back";
-    case "Pets":
+    case "Домашні улюбленці":
       return "mdi-paw";
-    case "Grocery":
+    case "Продукти":
       return "mdi-cart";
-    case "Utilities":
+    case "Комуналка":
       return "mdi-archive-eye-outline";
-    case "Rent":
+    case "Оренда":
       return "mdi-home-city";
-    case "Donates":
+    case "Донати":
       return "mdi-gift-outline";
-    case "Cafe and restaurants":
+    case "Кафешка":
       return "mdi-coffee-to-go-outline";
-    case "Credits payment":
+    case "Кредит":
       return "mdi-credit-card-outline";
-    case "Health":
+    case "Медицина":
       return "mdi-bottle-tonic-plus-outline";
-    case "Self education":
+    case "Самоосвіта":
       return "mdi-cast-education";
     case "Shopping":
       return "mdi-shopping-outline";

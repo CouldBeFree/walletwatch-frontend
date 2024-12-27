@@ -30,16 +30,16 @@
         :disabled="loading"
         :loading="loading"
       >
-        Register
+        Реєстрація
       </v-btn>
       <p class="mt-2 d-flex justify-end">
-        <router-link to="/auth/login">I already have account</router-link>
+        <router-link to="/auth/login">У мене є акаунт</router-link>
       </p>
     </div>
     <v-alert v-if="error" class="mt-5" type="error">{{ error }}</v-alert>
     <v-alert v-if="success" class="mt-5" type="success">
-      You have been successfully registered. No you can
-      <router-link to="/auth/login">Login</router-link>
+      Ви успішно зареєструвались. Тепер ви можете
+      <router-link to="/auth/login">залогінитись</router-link>
     </v-alert>
   </v-form>
 </template>

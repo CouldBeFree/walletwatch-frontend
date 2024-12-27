@@ -2,42 +2,42 @@
   <v-data-table :items="transformedData" :headers="headers" :loading="loading">
     <template v-slot:top>
       <v-toolbar flat>
-        <v-toolbar-title>Transaction Incomes</v-toolbar-title>
+        <v-toolbar-title>Дохід</v-toolbar-title>
         <v-divider class="mx-4" inset vertical></v-divider>
         <v-spacer></v-spacer>
         <v-dialog v-model="addIncome" max-width="500px">
           <template v-slot:activator="{ props }">
             <v-btn color="primary" dark class="mb-2" v-bind="props">
-              New Item
+              Створити дохід
             </v-btn>
           </template>
           <v-card>
-            <v-card-title>{{ income._id ? "Edit" : "Create" }}</v-card-title>
+            <v-card-title>{{ income._id ? "Редагувати" : "Створити" }}</v-card-title>
             <v-form @submit.prevent ref="form" v-model="valid" lazy-validation>
               <v-card-item>
                 <v-text-field
                   v-model="income.amount"
                   :rules="amountValidation"
                   required
-                  label="Amount"
+                  label="Сума"
                   type="number"
                   prefix="₴"
                 />
                 <v-text-field
                   v-model="income.date"
                   type="date"
-                  :rules="[(v) => !!v || 'Date is required']"
+                  :rules="[(v) => !!v || 'Введіть дату']"
                   required
                 />
                 <v-select
-                  label="Select"
+                  label="Дохід"
                   v-model="income.income_category"
                   :items="props.categories || []"
                   item-value="_id"
                   item-title="name"
-                  :rules="[(v) => !!v || 'Income is required']"
-                  :placeholder="'Select income'"
-                  :persistent-placeholder="'Select income'"
+                  :rules="[(v) => !!v || 'Введіть дохід']"
+                  :placeholder="'Виберіть дохід'"
+                  :persistent-placeholder="'Оберіть дохід'"
                 ></v-select>
                 <v-card-actions>
                   <v-spacer></v-spacer>
@@ -55,7 +55,7 @@
                     type="submit"
                     :loading="loading"
                   >
-                    {{ income._id ? "Edit" : "Create" }}
+                    {{ income._id ? "Редагувати" : "Створити" }}
                   </v-btn>
                 </v-card-actions>
               </v-card-item>
@@ -69,11 +69,11 @@
           width="400"
         >
           <v-card>
-            <v-card-title class="text-h5">Remove {{ income?.income_category?.name }}?</v-card-title>
+            <v-card-title class="text-h5">Видалити {{ income?.income_category?.name }}?</v-card-title>
             <v-card-actions>
               <v-spacer></v-spacer>
               <v-btn color="blue-darken-1" variant="flat" @click="closeDelete"
-              >Cancel
+              >Відмінити
               </v-btn
               >
               <v-btn
@@ -81,7 +81,7 @@
                 variant="flat"
                 @click="deleteItemConfirm"
                 :loading="loading"
-              >Remove
+              >Видалити
               </v-btn
               >
             </v-card-actions>
@@ -132,10 +132,10 @@ const addIncome = ref(false);
 const dialogDelete = ref(false);
 const income = reactive({...initialIncomeState});
 const headers = [
-  {title: "Income name", value: "income_category.name", sortable: true},
-  {title: "Amount", value: "amount", sortable: true},
-  {title: "Date", value: "date", sortable: true},
-  {title: "Actions", key: "actions", sortable: false},
+  {title: "Назва доходу", value: "income_category.name", sortable: true},
+  {title: "Сума", value: "amount", sortable: true},
+  {title: "Дата", value: "date", sortable: true},
+  {title: "Дія", key: "actions", sortable: false},
 ];
 
 watch(addIncome, (val) => {
