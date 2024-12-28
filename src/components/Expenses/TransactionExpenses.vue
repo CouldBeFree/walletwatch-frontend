@@ -30,7 +30,7 @@
                   required
                 />
                 <v-select
-                  label="Select"
+                  label="Витрати"
                   v-model="expense.expense_category"
                   :items="categories"
                   item-value="_id"
@@ -39,6 +39,12 @@
                   :placeholder="'Виберіть витрату'"
                   :persistent-placeholder="'Виберіть витрату'"
                 ></v-select>
+                <v-text-field
+                  label="Коментар"
+                  v-model="expense.comment"
+                  type="text"
+                  placeholder="Введіть коментар"
+                />
                 <v-card-actions>
                   <v-spacer></v-spacer>
                   <v-btn
@@ -123,6 +129,7 @@ const initialExpenseState = {
   amount: null,
   date: null,
   expense_category: null,
+  comment: null,
 };
 
 const { valid } = useFormStatusHandler();
@@ -135,6 +142,7 @@ const headers = [
   { title: "Назва витрат", value: "expense_category.name", sortable: true },
   { title: "Сума", value: "amount", sortable: true },
   { title: "Дата", value: "date", sortable: true },
+  { title: "Коментар", value: "comment", sortable: false },
   { title: "Дія", key: "actions", sortable: false },
 ];
 
@@ -171,7 +179,6 @@ const deleteItemConfirm = async () => {
 
 const deleteItem = (item) => {
   dialogDelete.value = true;
-  console.log(item);
   Object.assign(expense, { ...item });
 };
 
@@ -182,9 +189,10 @@ const onSubmit = async () => {
         ...expense,
         expense_category: expense.expense_category,
         id: expense._id,
-        amount: +expense.amount
+        amount: +expense.amount,
+        comment: expense.comment
       })
-    : emit("create", {amount: +expense.amount, date: expense.date, expense_category: expense.expense_category});
+    : emit("create", { amount: +expense.amount, date: expense.date, expense_category: expense.expense_category, comment: expense.comment });
   Object.assign(expense, { ...initialExpenseState });
   addExpense.value = false;
 };
