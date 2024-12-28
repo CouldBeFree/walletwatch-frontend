@@ -110,6 +110,7 @@ import { ref, reactive, watch, computed } from "vue";
 import { amountRules } from "@/settings/validationRules";
 import commaSeparator from "@/utils/commaSeparator";
 import useFormStatusHandler from "@/composable/useFormStatusHandler";
+import truncateText from "@/utils/truncateText";
 
 const props = defineProps(["data", "loading", "categories"]);
 const emit = defineEmits(["delete", "create", "update"]);
@@ -120,6 +121,7 @@ const transformedData = computed(() => {
       ...el,
       date: moment(el.date).format("YYYY-MM-DD"),
       amount: commaSeparator(el.amount),
+      comment: truncateText(el.comment, 30) || '',
     };
   });
 });
