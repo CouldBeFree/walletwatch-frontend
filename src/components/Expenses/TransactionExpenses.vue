@@ -1,5 +1,8 @@
 <template>
   <v-data-table :items="transformedData" :headers="headers" :loading="loading">
+<!--    <template v-slot:item.expense_category.name="{ value }">-->
+<!--      <a :href="`expense/${getId(value)}`">{{value}}</a>-->
+<!--    </template>-->
     <template v-slot:top>
       <v-toolbar flat>
         <v-toolbar-title>Витрати</v-toolbar-title>
@@ -159,6 +162,12 @@ watch(dialogDelete, (val) => {
     Object.assign(expense, { ...initialExpenseState });
   }
 });
+
+// const getId = (name) => {
+//   const category = transformedData.value.find(el => el.expense_category.name === name);
+//   if (category) return category.expense_category._id;
+//   return null;
+// }
 
 const editItem = (item) => {
   const copyValue = JSON.parse(JSON.stringify(item));
