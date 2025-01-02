@@ -14,7 +14,7 @@ export default (expenseName) => {
       return "mdi-gift-outline";
     case "Кафешка":
       return "mdi-coffee-to-go-outline";
-    case "Кредит":
+    case "Кредити":
       return "mdi-credit-card-outline";
     case "Медицина":
       return "mdi-bottle-tonic-plus-outline";
