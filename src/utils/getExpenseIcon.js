@@ -18,6 +18,8 @@ export default (expenseName) => {
       return "mdi-credit-card-outline";
     case "Медицина":
       return "mdi-bottle-tonic-plus-outline";
+    case "Веб сервіси":
+      return "mdi-web-check";
     case "Самоосвіта":
       return "mdi-cast-education";
     case "Shopping":
