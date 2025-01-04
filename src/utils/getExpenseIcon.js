@@ -20,6 +20,8 @@ export default (expenseName) => {
       return "mdi-bottle-tonic-plus-outline";
     case "Самоосвіта":
       return "mdi-cast-education";
+    case "Веб сервіси":
+      return "mdi-web-check";
     case "Shopping":
       return "mdi-shopping-outline";
     case "Savings":
