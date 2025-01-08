@@ -10,8 +10,8 @@
         :title="cat.name"
       >
         <v-card-actions>
-          <v-btn prepend-icon="mdi-pencil" text="Edit" @click="onEditItem(cat)"></v-btn>
-          <v-btn prepend-icon="mdi-delete-forever" text="Remove"></v-btn>
+          <v-btn prepend-icon="mdi-pencil" text="Редагувати" @click="onEditItem(cat)"></v-btn>
+          <v-btn prepend-icon="mdi-delete-forever" text="Видалити"></v-btn>
         </v-card-actions>
       </v-card>
     </v-col>

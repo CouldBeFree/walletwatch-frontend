@@ -19,7 +19,8 @@ export const EXPENSE_COLORS = {
   "Кафешка": '#b21edb',
   "Кредити": '#1ec8db',
   "Веб сервіси": '#242649',
-  "Медицина": '#ffff00'
+  "Медицина": '#ffff00',
+  "Дім та ремонт": '#edb610'
 }
 
 export const INCOME_COLORS = {
