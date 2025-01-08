@@ -1,8 +1,5 @@
 <template>
   <v-data-table :items="transformedData" :headers="headers" :loading="loading">
-<!--    <template v-slot:item.expense_category.name="{ value }">-->
-<!--      <a :href="`expense/${getId(value)}`">{{value}}</a>-->
-<!--    </template>-->
     <template v-slot:top>
       <v-toolbar flat>
         <v-toolbar-title>Витрати</v-toolbar-title>
@@ -15,7 +12,7 @@
             </v-btn>
           </template>
           <v-card>
-            <v-card-title>{{ expense._id ? "Редагувати" : "Створити" }}</v-card-title>
+            <v-card-title class="pa-3">{{ expense._id ? "Редагувати" : "Створити" }}</v-card-title>
             <v-form @submit.prevent ref="form" v-model="valid" lazy-validation>
               <v-card-item>
                 <v-text-field
@@ -41,6 +38,15 @@
                   :rules="[(v) => !!v || 'Введіть витрату']"
                   :placeholder="'Виберіть витрату'"
                   :persistent-placeholder="'Виберіть витрату'"
+                ></v-select>
+                <v-select
+                  label="Категорія"
+                  v-model="expense.expense_sub_category"
+                  :items="subCategory || []"
+                  item-value="_id"
+                  item-title="name"
+                  :placeholder="'Виберіть Категорію'"
+                  :persistent-placeholder="'Виберіть категорію'"
                 ></v-select>
                 <v-text-field
                   label="Коментар"
@@ -79,19 +85,22 @@
         >
           <v-card>
             <v-card-title class="text-h5"
-              >Видалити {{ expense?.expense_category?.name }}?</v-card-title
+            >Видалити {{ expense?.expense_category?.name }}?
+            </v-card-title
             >
             <v-card-actions>
               <v-spacer></v-spacer>
               <v-btn color="blue-darken-1" variant="flat" @click="closeDelete"
-                >Відмінити</v-btn
+              >Відмінити
+              </v-btn
               >
               <v-btn
                 color="blue-darken-1"
                 variant="flat"
                 @click="deleteItemConfirm"
                 :loading="loading"
-                >Видалити</v-btn
+              >Видалити
+              </v-btn
               >
             </v-card-actions>
           </v-card>
@@ -102,15 +111,15 @@
       <v-icon size="small" class="me-2" @click="editItem(item)">
         mdi-pencil
       </v-icon>
-      <v-icon size="small" @click="deleteItem(item)"> mdi-delete </v-icon>
+      <v-icon size="small" @click="deleteItem(item)"> mdi-delete</v-icon>
     </template>
   </v-data-table>
 </template>
 
 <script setup>
 import moment from "moment";
-import { ref, reactive, watch, computed } from "vue";
-import { amountRules } from "@/settings/validationRules";
+import {ref, reactive, watch, computed} from "vue";
+import {amountRules} from "@/settings/validationRules";
 import commaSeparator from "@/utils/commaSeparator";
 import useFormStatusHandler from "@/composable/useFormStatusHandler";
 import truncateText from "@/utils/truncateText";
@@ -129,6 +138,11 @@ const transformedData = computed(() => {
   });
 });
 
+const subCategory = computed(() => {
+  const result = props.categories.filter(item => item._id === expense.expense_category);
+  return result.length ? result[0]?.sub_categories : result;
+})
+
 const initialExpenseState = {
   _id: null,
   amount: null,
@@ -137,37 +151,40 @@ const initialExpenseState = {
   comment: null,
 };
 
-const { valid } = useFormStatusHandler();
+const {valid} = useFormStatusHandler();
 
 const amountValidation = ref(amountRules);
 const addExpense = ref(false);
 const dialogDelete = ref(false);
-const expense = reactive({ ...initialExpenseState });
+let expense = reactive({...initialExpenseState});
 const headers = [
-  { title: "Назва витрат", value: "expense_category.name", sortable: true },
-  { title: "Сума", value: "amount", sortable: true },
-  { title: "Дата", value: "date", sortable: true },
-  { title: "Коментар", value: "comment", sortable: false },
-  { title: "Дія", key: "actions", sortable: false },
+  {title: "Назва витрат", value: "expense_category.name", sortable: true},
+  {title: "Сума", value: "amount", sortable: true},
+  {title: "Дата", value: "date", sortable: true},
+  {title: "Коментар", value: "comment", sortable: false},
+  {title: "Категорія", value: "expense_sub_category.name", sortable: false},
+  {title: "Дія", key: "actions", sortable: false},
 ];
 
 watch(addExpense, (val) => {
   if (!val) {
-    Object.assign(expense, { ...initialExpenseState });
+    Object.assign(expense, {...initialExpenseState});
   }
 });
 
 watch(dialogDelete, (val) => {
   if (!val) {
-    Object.assign(expense, { ...initialExpenseState });
+    Object.assign(expense, {...initialExpenseState});
   }
 });
 
-// const getId = (name) => {
-//   const category = transformedData.value.find(el => el.expense_category.name === name);
-//   if (category) return category.expense_category._id;
-//   return null;
-// }
+watch(
+  () => expense.expense_category,
+  (newValue, oldValue) => {
+    if (!oldValue) return;
+    Object.assign(expense, {...expense, expense_sub_category: null});
+  }
+);
 
 const editItem = (item) => {
   const copyValue = JSON.parse(JSON.stringify(item));
@@ -190,21 +207,28 @@ const deleteItemConfirm = async () => {
 
 const deleteItem = (item) => {
   dialogDelete.value = true;
-  Object.assign(expense, { ...item });
+  Object.assign(expense, {...item});
 };
 
 const onSubmit = async () => {
   if (!valid.value) return;
   expense._id
     ? emit("update", {
-        ...expense,
-        expense_category: expense.expense_category,
-        id: expense._id,
-        amount: +expense.amount,
-        comment: expense.comment
-      })
-    : emit("create", { amount: +expense.amount, date: expense.date, expense_category: expense.expense_category, comment: expense.comment });
-  Object.assign(expense, { ...initialExpenseState });
+      ...expense,
+      expense_category: expense.expense_category,
+      id: expense._id,
+      amount: +expense.amount,
+      ...(expense.expense_sub_category && {expense_sub_category: expense.expense_sub_category}),
+      ...(expense.comment && {comment: expense.comment}),
+    })
+    : emit("create", {
+      amount: +expense.amount,
+      date: expense.date,
+      expense_category: expense.expense_category,
+      ...(expense.expense_sub_category && {expense_sub_category: expense.expense_sub_category}),
+      ...(expense.comment && {comment: expense.comment}),
+    });
+  Object.assign(expense, {...initialExpenseState});
   addExpense.value = false;
 };
 </script>

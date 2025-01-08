@@ -22,6 +22,8 @@ export default (expenseName) => {
       return "mdi-web-check";
     case "Самоосвіта":
       return "mdi-cast-education";
+    case "Дім та ремонт":
+      return "mdi-home-analytics";
     case "Shopping":
       return "mdi-shopping-outline";
     case "Savings":

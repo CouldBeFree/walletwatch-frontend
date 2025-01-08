@@ -13,20 +13,7 @@
         @delete="onDeleteUsersExpense"
       />
       <div class="mt-6">
-        <v-row xs="12" sm="7" md="7" lg="7">
-          <v-col xs="6" sm="6" md="6" lg="6" v-for="cat in getUserExpenseCategories">
-            <v-card
-              :key="cat._id"
-              class="mx-auto"
-              href="https://github.com/vuetifyjs/vuetify/"
-              :prepend-icon="getExpenseIcon(cat.name)"
-              rel="noopener"
-              subtitle="Check out the official repository"
-              target="_blank"
-              :title="cat.name"
-            ></v-card>
-          </v-col>
-        </v-row>
+        <ExpenseCategories :value="getUserExpenseCategories" />
       </div>
     </v-col>
     <v-col xs="12" sm="5" md="5" lg="5">
@@ -44,6 +31,7 @@ import DateSelector from "@/components/DateSelector/DateSelector.vue";
 import { onMounted, reactive } from "vue";
 import useDateSelector from "@/composable/useDateSelector";
 import getExpenseIcon from "@/utils/getExpenseIcon";
+import ExpenseCategories from "@/components/ExpenseCategories/ExpenseCategories.vue";
 
 const { getUserExpenseCategories, getAllExpenses, getLoading: loading, getUserTransactions, onCreateExpense, onDeleteExpense, onUpdateExpense } = useUserExpenses();
 

@@ -34,6 +34,10 @@ class ExpenseService {
       },
     });
   }
+
+  static getExpense(id) {
+    return Gateway.get(`/expenses/${id}`)
+  }
 }
 
 export default ExpenseService;
