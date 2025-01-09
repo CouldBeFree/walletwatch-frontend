@@ -1,6 +1,8 @@
 <template>
   <div class="text-center">
-    <p class="text-h4 mb-4">Загальні витрати {{ commaSeparator(totalCount) }}₴</p>
+    <p class="text-h4 mb-4">
+      Загальні витрати {{ commaSeparator(totalCount) }}₴
+    </p>
     <DoughnutChart :chartData="chartData" />
   </div>
 </template>

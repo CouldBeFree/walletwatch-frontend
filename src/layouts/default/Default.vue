@@ -36,22 +36,22 @@
           title="Витрати"
           value="Expenses"
         ></v-list-item>
-<!--        <v-list-item-->
-<!--          :link="true"-->
-<!--          exact-->
-<!--          :to="'/dashboard/goals'"-->
-<!--          prepend-icon="mdi-flag-checkered"-->
-<!--          title="Goals"-->
-<!--          value="Goals"-->
-<!--        ></v-list-item>-->
-<!--        <v-list-item-->
-<!--          :link="true"-->
-<!--          exact-->
-<!--          :to="'/dashboard/categories'"-->
-<!--          prepend-icon="mdi-playlist-edit"-->
-<!--          title="Categories"-->
-<!--          value="Categories"-->
-<!--        ></v-list-item>-->
+        <!--        <v-list-item-->
+        <!--          :link="true"-->
+        <!--          exact-->
+        <!--          :to="'/dashboard/goals'"-->
+        <!--          prepend-icon="mdi-flag-checkered"-->
+        <!--          title="Goals"-->
+        <!--          value="Goals"-->
+        <!--        ></v-list-item>-->
+        <!--        <v-list-item-->
+        <!--          :link="true"-->
+        <!--          exact-->
+        <!--          :to="'/dashboard/categories'"-->
+        <!--          prepend-icon="mdi-playlist-edit"-->
+        <!--          title="Categories"-->
+        <!--          value="Categories"-->
+        <!--        ></v-list-item>-->
       </v-list>
 
       <v-divider></v-divider>

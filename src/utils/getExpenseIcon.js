@@ -27,6 +27,6 @@ export default (expenseName) => {
     case "Shopping":
       return "mdi-shopping-outline";
     case "Savings":
-      return "mdi-sack-percent"
+      return "mdi-sack-percent";
   }
 };

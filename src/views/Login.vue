@@ -46,7 +46,11 @@ import AuthService from "@/service/apiService/AuthService";
 import router from "@/router";
 import getErrorMessage from "@/utils/getErrorMessage";
 import useFormStatusHandler from "@/composable/useFormStatusHandler";
-import { TEXT_TYPE, PASSWORD_TYPE, LOCAL_STORAGE_TOKEN_NAME } from "@/constants";
+import {
+  TEXT_TYPE,
+  PASSWORD_TYPE,
+  LOCAL_STORAGE_TOKEN_NAME,
+} from "@/constants";
 
 const emailValidation = ref(emailRules);
 const passwordValidation = ref(passwordRules);

@@ -14,9 +14,9 @@
       <div class="mb-6 text-center">
         <DateSelector @selectDate="onDateSelect" />
       </div>
-<!--      <div class="mb-6">-->
-<!--        <TransactionHistory :value="history" :loading="transactionLoading" />-->
-<!--      </div>-->
+      <!--      <div class="mb-6">-->
+      <!--        <TransactionHistory :value="history" :loading="transactionLoading" />-->
+      <!--      </div>-->
       <TotalStatistic
         :expenseValue="expenseValue"
         :incomeValue="incomeValue"

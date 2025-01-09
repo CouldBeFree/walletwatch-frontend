@@ -1,5 +1,5 @@
 import { expensesStore } from "@/store/expenses";
-import {onMounted, ref} from "vue";
+import { onMounted, ref } from "vue";
 import { storeToRefs } from "pinia";
 import proxy from "@/utils/proxy";
 import { FIRE_SNACK } from "@/constants";
@@ -11,9 +11,9 @@ export default function useTransactionExpenses() {
 
   const loading = ref(false);
 
-  onMounted( () => {
+  onMounted(() => {
     // getCategories();
-  })
+  });
 
   const onUpdate = async (val) => {
     loading.value = true;

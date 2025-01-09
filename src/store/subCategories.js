@@ -4,15 +4,15 @@ import SubCategoryService from "@/service/apiService/SubCategoryService";
 export const subCategories = defineStore("subCategories", {
   state: () => ({
     loading: true,
-    subCategories: []
+    subCategories: [],
   }),
   getters: {
     getLoading(state) {
-      return state.loading
+      return state.loading;
     },
     getAllSubCategories(state) {
-      return state.subCategories
-    }
+      return state.subCategories;
+    },
   },
   actions: {
     async getSubCategories(id) {
@@ -50,6 +50,6 @@ export const subCategories = defineStore("subCategories", {
       } finally {
         this.loading = false;
       }
-    }
-  }
+    },
+  },
 });

@@ -23,7 +23,7 @@ class ExpenseService {
   }
 
   static getExpenseCategories() {
-    return Gateway.get('/expenses/categories');
+    return Gateway.get("/expenses/categories");
   }
 
   static getStatisticByDate(date) {
@@ -36,7 +36,7 @@ class ExpenseService {
   }
 
   static getExpense(id) {
-    return Gateway.get(`/expenses/${id}`)
+    return Gateway.get(`/expenses/${id}`);
   }
 }
 

@@ -2,7 +2,7 @@
   <v-row align="start">
     <v-col xs="12" sm="7" md="7" lg="7">
       <div class="mb-6">
-        <DateSelector @selectDate="onDateSelect"/>
+        <DateSelector @selectDate="onDateSelect" />
       </div>
       <TransactionIncomes
         :categories="getIncomeCategories"
@@ -15,7 +15,7 @@
       />
     </v-col>
     <v-col xs="12" sm="5" md="5" lg="5">
-      <IncomeChartStatistic :data="getStatistic"/>
+      <IncomeChartStatistic :data="getStatistic" />
     </v-col>
   </v-row>
 </template>
@@ -27,10 +27,11 @@ import useUserIncomes from "@/composable/Incomes/useUserIncomes";
 import useTransactionIncomes from "@/composable/Incomes/useTransactionIncomes";
 import useIncomeChart from "@/composable/Incomes/useIncomeChart";
 import DateSelector from "@/components/DateSelector/DateSelector.vue";
-import {reactive} from "vue";
+import { reactive } from "vue";
 import useDateSelector from "@/composable/useDateSelector";
 
-const {getUsersIncomes, getAllIncomesFromApi, getIncomeCategories} = useUserIncomes();
+const { getUsersIncomes, getAllIncomesFromApi, getIncomeCategories } =
+  useUserIncomes();
 
 const {
   getAllIncomes,
@@ -40,13 +41,13 @@ const {
   onDelete,
 } = useTransactionIncomes();
 
-const {getData, getStatistic} = useIncomeChart();
-const {getDate} = useDateSelector();
+const { getData, getStatistic } = useIncomeChart();
+const { getDate } = useDateSelector();
 
 const selectedDate = reactive(getDate("month"));
 
 const onDateSelect = async (value) => {
-  Object.assign(selectedDate, {...value});
+  Object.assign(selectedDate, { ...value });
   await getAllIncomesFromApi(value);
   await getData(value);
 };

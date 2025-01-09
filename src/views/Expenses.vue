@@ -33,7 +33,15 @@ import useDateSelector from "@/composable/useDateSelector";
 import getExpenseIcon from "@/utils/getExpenseIcon";
 import ExpenseCategories from "@/components/ExpenseCategories/ExpenseCategories.vue";
 
-const { getUserExpenseCategories, getAllExpenses, getLoading: loading, getUserTransactions, onCreateExpense, onDeleteExpense, onUpdateExpense } = useUserExpenses();
+const {
+  getUserExpenseCategories,
+  getAllExpenses,
+  getLoading: loading,
+  getUserTransactions,
+  onCreateExpense,
+  onDeleteExpense,
+  onUpdateExpense,
+} = useUserExpenses();
 
 const { getStatistic, getData } = useExpenseChart();
 const { getDate } = useDateSelector();
@@ -47,7 +55,7 @@ onMounted(() => {
 const updateData = async (date) => {
   await getUserTransactions(date);
   await getData(date);
-}
+};
 
 const onDateSelect = async (value) => {
   Object.assign(selectedDate, { ...value });
