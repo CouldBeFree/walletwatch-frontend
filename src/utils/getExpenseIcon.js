@@ -18,13 +18,15 @@ export default (expenseName) => {
       return "mdi-credit-card-outline";
     case "Медицина":
       return "mdi-bottle-tonic-plus-outline";
-    case "Самоосвіта":
-      return "mdi-cast-education";
     case "Веб сервіси":
       return "mdi-web-check";
+    case "Самоосвіта":
+      return "mdi-cast-education";
+    case "Дім та ремонт":
+      return "mdi-home-analytics";
     case "Shopping":
       return "mdi-shopping-outline";
     case "Savings":
-      return "mdi-sack-percent"
+      return "mdi-sack-percent";
   }
 };

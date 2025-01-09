@@ -91,7 +91,9 @@
       </v-card-title>
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn variant="flat" color="primary" @click="onCancel"> Відмінити </v-btn>
+        <v-btn variant="flat" color="primary" @click="onCancel">
+          Відмінити
+        </v-btn>
         <v-btn
           variant="flat"
           color="primary"

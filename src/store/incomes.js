@@ -1,4 +1,4 @@
-import {defineStore} from "pinia";
+import { defineStore } from "pinia";
 import IncomeService from "@/service/apiService/IncomeService";
 
 export const incomesStore = defineStore("incomes", {
@@ -7,7 +7,7 @@ export const incomesStore = defineStore("incomes", {
     allIncomes: [],
     usersTransactions: [],
     statistic: [],
-    userIncomeCategories: []
+    userIncomeCategories: [],
   }),
   getters: {
     getIncomeCategories: (state) => {
@@ -28,15 +28,15 @@ export const incomesStore = defineStore("incomes", {
   },
   actions: {
     async getIncomesCategoriesFromApi() {
-      const {data} = await IncomeService.getIncomesCategories();
+      const { data } = await IncomeService.getIncomesCategories();
       this.userIncomeCategories = data;
     },
     async getUsersIncomesFromApi() {
-      const {data} = await IncomeService.getUsersIncomes();
+      const { data } = await IncomeService.getUsersIncomes();
       this.usersIncomes = data;
     },
     async getAllIncomesFromApi(date) {
-      const {data} = await IncomeService.getAllIncomes(date);
+      const { data } = await IncomeService.getAllIncomes(date);
       this.allIncomes = data;
     },
     async removeCategoryIncome(id) {
@@ -54,11 +54,11 @@ export const incomesStore = defineStore("incomes", {
       }
     },
     async getUserIncomes(date) {
-      const {data} = await IncomeService.getAllCreatedIncomes(date);
+      const { data } = await IncomeService.getAllCreatedIncomes(date);
       this.usersTransactions = data;
     },
     async updateUserTransaction(income) {
-      console.log('income', income);
+      console.log("income", income);
       try {
         await IncomeService.updateIncome(income, income.id);
       } catch (e) {
@@ -80,7 +80,7 @@ export const incomesStore = defineStore("incomes", {
       }
     },
     async getUsersStatistic(date) {
-      const {data} = await IncomeService.getStatisticByDate(date);
+      const { data } = await IncomeService.getStatisticByDate(date);
       this.statistic = data;
     },
   },

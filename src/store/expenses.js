@@ -6,11 +6,12 @@ export const expensesStore = defineStore("expenses", {
     allExpenses: [],
     expenseCategories: [],
     statistic: [],
-    loading: false
+    expense: {},
+    loading: false,
   }),
   getters: {
     getLoading(state) {
-      return state.loading
+      return state.loading;
     },
     getAllExpenses(state) {
       return state.allExpenses;
@@ -21,8 +22,17 @@ export const expensesStore = defineStore("expenses", {
     getStatistic(state) {
       return state.statistic;
     },
+    getExpense(state) {
+      return state.expense;
+    },
   },
   actions: {
+    async getExpenseItem(id) {
+      this.loading = true;
+      const { data } = await ExpenseService.getExpense(id);
+      this.expense = data;
+      this.loading = false;
+    },
     async getCategories() {
       this.loading = true;
       const { data } = await ExpenseService.getExpenseCategories();

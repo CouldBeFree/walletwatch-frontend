@@ -23,7 +23,7 @@ class IncomeService {
   }
 
   static getIncomesCategories() {
-    return Gateway.get('/incomes/categories');
+    return Gateway.get("/incomes/categories");
   }
 
   static getAllCreatedIncomes(date) {

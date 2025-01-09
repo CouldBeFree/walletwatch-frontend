@@ -7,8 +7,15 @@ import getErrorMessage from "@/utils/getErrorMessage";
 
 export default function useUserExpenses() {
   const store = expensesStore();
-  const { getAllExpenses, getUserExpenseCategories, getLoading } = storeToRefs(store);
-  const { getCategories, removeCategoryExpense, createUserTransaction, getUserTransactions, updateUserTransaction } = store;
+  const { getAllExpenses, getUserExpenseCategories, getLoading } =
+    storeToRefs(store);
+  const {
+    getCategories,
+    removeCategoryExpense,
+    createUserTransaction,
+    getUserTransactions,
+    updateUserTransaction,
+  } = store;
 
   onMounted(async () => {
     await getCategories();
@@ -23,7 +30,7 @@ export default function useUserExpenses() {
       proxy.publish(FIRE_SNACK, { type: "red", text: errorMsg });
       throw new Error(e);
     }
-  }
+  };
 
   const onDeleteExpense = async (id) => {
     try {
