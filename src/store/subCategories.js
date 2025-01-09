@@ -40,6 +40,16 @@ export const subCategories = defineStore("subCategories", {
       } finally {
         this.loading = false;
       }
+    },
+    async removeSubCategory(id) {
+      this.loading = true;
+      try {
+        await SubCategoryService.deleteSubCategory(id);
+      } catch (e) {
+        throw new Error(e.response.data.message);
+      } finally {
+        this.loading = false;
+      }
     }
   }
 });

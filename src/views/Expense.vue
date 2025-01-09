@@ -2,16 +2,15 @@
   <h1 class="mb-4">{{getExpense.expense}}</h1>
   <v-btn @click="dialogCreate = true" class="mb-4" color="primary" size="large" icon="mdi-plus"></v-btn>
   <v-row>
-    <v-col cols="12" xs="12" sm="12" md="2" lg="2" v-for="cat in getAllSubCategories">
+    <v-col :key="cat._id" cols="12" xs="12" sm="12" md="4" lg="3" v-for="cat in getAllSubCategories">
       <v-card
-        :key="cat._id"
         class="mx-auto"
         :prepend-icon="cat.expense_category_icon"
         :title="cat.name"
       >
         <v-card-actions>
-          <v-btn prepend-icon="mdi-pencil" text="Редагувати" @click="onEditItem(cat)"></v-btn>
-          <v-btn prepend-icon="mdi-delete-forever" text="Видалити"></v-btn>
+          <v-btn icon="mdi-pencil" text="Редагувати" @click="onEditItem(cat)"></v-btn>
+          <v-btn icon="mdi-delete-forever" text="Видалити" @click="onRemove(cat)"></v-btn>
         </v-card-actions>
       </v-card>
     </v-col>
@@ -64,13 +63,41 @@
       </v-form>
     </v-card>
   </v-dialog>
+  <v-dialog
+    v-model="dialogRemove"
+    scrollable
+    max-width="500px"
+    width="400"
+  >
+    <v-card>
+      <v-card-title class="text-h5"
+      >Видалити {{ expenseItem.name }}?
+      </v-card-title
+      >
+      <v-card-actions>
+        <v-spacer></v-spacer>
+        <v-btn color="blue-darken-1" variant="flat" @click="closeDelete"
+        >Відмінити
+        </v-btn
+        >
+        <v-btn
+          color="blue-darken-1"
+          variant="flat"
+          @click="deleteItemConfirm"
+          :loading="subCategoryLoading"
+        >Видалити
+        </v-btn
+        >
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
 </template>
 
 <script setup>
 import {expensesStore} from "@/store/expenses";
 import {subCategories} from "@/store/subCategories";
 import {useRoute} from 'vue-router'
-import {onMounted, reactive, ref, toRaw, watch} from "vue";
+import {onMounted, reactive, ref, watch} from "vue";
 import {storeToRefs} from "pinia";
 import useFormStatusHandler from "@/composable/useFormStatusHandler";
 import {nameRules} from "@/settings/validationRules";
@@ -80,14 +107,16 @@ import {FIRE_SNACK} from "@/constants";
 
 const {valid} = useFormStatusHandler();
 const dialogCreate = ref(false);
+const dialogRemove = ref(false);
 const route = useRoute();
 const expense = expensesStore();
 const subCategory = subCategories();
-const { getExpense, loading } = storeToRefs(expense);
+const { getExpense } = storeToRefs(expense);
 const { getLoading: subCategoryLoading, getAllSubCategories } = storeToRefs(subCategory);
 const {
   getExpenseItem
 } = expense;
+
 const initialCategoryState = {
   _id: null,
   name: null,
@@ -99,7 +128,8 @@ let expenseItem = reactive({...initialCategoryState});
 const {
   getSubCategories,
   createSubCategory,
-  updateSubCategory
+  updateSubCategory,
+  removeSubCategory
 } = subCategory;
 
 onMounted(async () => {
@@ -115,6 +145,28 @@ const onEditItem = (item) => {
   Object.assign(expenseItem, {  ...item });
   dialogCreate.value = true;
 };
+
+const onRemove = (item) => {
+  Object.assign(expenseItem, {  ...item });
+  dialogRemove.value = true;
+}
+
+const closeDelete = () => {
+  dialogRemove.value = false;
+  Object.assign(expenseItem, {  ...initialCategoryState });
+}
+
+const deleteItemConfirm = () => {
+  removeSubCategory(expenseItem._id)
+    .then(() => {
+      getSubCategories(route.params.id);
+      proxy.publish(FIRE_SNACK, { type: "green", text: "Success" });
+    })
+    .catch((e) => {
+      proxy.publish(FIRE_SNACK, { type: "red", text: e });
+    })
+    .finally(() => dialogRemove.value = false)
+}
 
 const onSubmit = () => {
   if (!valid.value) return;

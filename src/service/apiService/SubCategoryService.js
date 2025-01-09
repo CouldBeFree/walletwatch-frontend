@@ -12,6 +12,10 @@ class SubCategoryService {
   static updatePayload(payload) {
     return Gateway.put(`/expense-sub-category/${payload._id}`, payload)
   }
+
+  static deleteSubCategory(id) {
+    return Gateway.delete(`/expense-sub-category/${id}`)
+  }
 }
 
 export default SubCategoryService;
