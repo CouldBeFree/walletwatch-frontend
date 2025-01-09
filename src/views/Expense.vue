@@ -1,5 +1,4 @@
 <template>
-  <h1 class="mb-4">{{ getExpense.expense }}</h1>
   <v-btn
     @click="dialogCreate = true"
     class="mb-4"
@@ -7,7 +6,9 @@
     size="large"
     icon="mdi-plus"
   ></v-btn>
-  <v-row>
+  <h1 v-if="!expenseLoading" class="mb-4">{{ getExpense.expense }}</h1>
+  <v-skeleton-loader v-else class="mb-4" width="300" type="heading" />
+  <v-row v-if="!subCategoryLoading">
     <v-col
       :key="cat._id"
       cols="12"
@@ -35,6 +36,19 @@
           ></v-btn>
         </v-card-actions>
       </v-card>
+    </v-col>
+  </v-row>
+  <v-row v-else>
+    <v-col
+      :key="index"
+      cols="12"
+      xs="12"
+      sm="12"
+      md="4"
+      lg="3"
+      v-for="(cat, index) in 3"
+    >
+      <v-skeleton-loader class="mb-4" type="card" />
     </v-col>
   </v-row>
   <v-dialog v-model="dialogCreate" scrollable max-width="500px" width="400">
@@ -122,7 +136,7 @@ const subCategory = subCategories();
 const { getExpense } = storeToRefs(expense);
 const { getLoading: subCategoryLoading, getAllSubCategories } =
   storeToRefs(subCategory);
-const { getExpenseItem } = expense;
+const { getExpenseItem, getLoading: expenseLoading } = expense;
 
 const initialCategoryState = {
   _id: null,
