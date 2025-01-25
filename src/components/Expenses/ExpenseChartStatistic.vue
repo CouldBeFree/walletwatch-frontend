@@ -3,13 +3,13 @@
     <p class="text-h4 mb-4">
       Загальні витрати {{ commaSeparator(totalCount) }}₴
     </p>
-    <DoughnutChart :chartData="chartData" />
+    <BarChart :chart-data="chartData" class="mt-8" />
   </div>
 </template>
 
 <script setup>
 import commaSeparator from "@/utils/commaSeparator";
-import { DoughnutChart } from "vue-chart-3";
+import { BarChart } from "vue-chart-3";
 import { Chart, registerables } from "chart.js";
 import { computed } from "vue";
 import { EXPENSE_COLORS } from "@/constants";
@@ -42,6 +42,7 @@ const chartData = computed(() => {
     labels,
     datasets: [
       {
+        label: "Витрати",
         data,
         backgroundColor,
       },

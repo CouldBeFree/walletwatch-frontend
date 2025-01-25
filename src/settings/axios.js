@@ -12,15 +12,6 @@ export const Gateway = axios.create({
   },
 });
 
-// const onResponse = (response) => {
-//   const { authorization } = response.headers;
-//   if (authorization) {
-//     const token = authorization.replace("Bearer ", "");
-//     localStorage.setItem(LOCAL_STORAGE_TOKEN_NAME, token);
-//   }
-//   return response;
-// };
-
 const onRequest = (request) => {
   const { url } = request;
   const token = localStorage.getItem(LOCAL_STORAGE_TOKEN_NAME);
