@@ -17,7 +17,11 @@
       </div>
     </v-col>
     <v-col xs="12" sm="5" md="5" lg="5">
-      <ExpenseChartStatistic :data="getStatistic" />
+      <ExpenseChartStatistic
+        :data="getStatistic"
+        :categories="getUserExpenseCategories"
+        @onSelect="onSelectCategories"
+      />
     </v-col>
   </v-row>
 </template>
@@ -30,7 +34,6 @@ import useExpenseChart from "@/composable/Expenses/useExpenseChart";
 import DateSelector from "@/components/DateSelector/DateSelector.vue";
 import { onMounted, reactive } from "vue";
 import useDateSelector from "@/composable/useDateSelector";
-import getExpenseIcon from "@/utils/getExpenseIcon";
 import ExpenseCategories from "@/components/ExpenseCategories/ExpenseCategories.vue";
 
 const {
@@ -48,11 +51,20 @@ const { getDate } = useDateSelector();
 
 const selectedDate = reactive(getDate("month"));
 
+const onSelectCategories = async (ids) => {
+  const payload = {
+    categoryId: ids,
+    ...selectedDate,
+  };
+  await getData(payload);
+};
+
 onMounted(() => {
   getUserTransactions(selectedDate);
 });
 
 const updateData = async (date) => {
+  console.log({ ...date });
   await getUserTransactions(date);
   await getData(date);
 };

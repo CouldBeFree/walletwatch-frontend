@@ -15,9 +15,9 @@ export default function useExpenseChart() {
     loading.value = false;
   });
 
-  const getData = async (date) => {
+  const getData = async (payload) => {
     loading.value = true;
-    await store.getUsersStatistic(date);
+    await store.getUsersStatistic(payload);
     loading.value = false;
   };
 

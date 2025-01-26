@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <v-main>
-      <v-container class="fill-height d-flex align-center justify-center">
+      <v-container fluid class="fill-height d-flex align-center justify-center">
         <v-row>
           <v-col
             xs="12"
