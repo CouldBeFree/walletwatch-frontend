@@ -1,6 +1,6 @@
 <template>
   <v-row>
-    <v-col cols="12" md="4" sm="3" v-for="item in model" :key="item.id">
+    <v-col cols="12" xs="6" sm="6" md="4" v-for="item in model" :key="item.id">
       <v-checkbox
         color="primary"
         :label="item.name"
