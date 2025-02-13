@@ -21,6 +21,7 @@ export const EXPENSE_COLORS = {
   "Веб сервіси": "#242649",
   Медицина: "#ffff00",
   "Дім та ремонт": "#edb610",
+  "Краса і здоров'я": "#194f27",
 };
 
 export const INCOME_COLORS = {

@@ -28,5 +28,7 @@ export default (expenseName) => {
       return "mdi-shopping-outline";
     case "Savings":
       return "mdi-sack-percent";
+    case "Краса і здоров'я":
+      return "mdi-cart-heart";
   }
 };

@@ -61,6 +61,8 @@ export default function useDateSelector() {
         return getYear();
       case "month":
         return getMonth();
+      case "selectMonth":
+        return getMonth();
     }
   };
 

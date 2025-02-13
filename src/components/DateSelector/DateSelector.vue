@@ -35,6 +35,30 @@
       </v-card-actions>
     </v-card>
   </v-dialog>
+
+  <v-dialog v-model="isSelectMonthModalOpen" width="400" max-width="600">
+    <v-card>
+      <v-divider></v-divider>
+      <v-card-item>
+        <v-date-picker
+          v-model="selectedMonth"
+          title="Select Month"
+          :show-adjacent-months="false"
+          view-mode="months"
+        ></v-date-picker>
+      </v-card-item>
+      <v-divider></v-divider>
+      <v-card-actions>
+        <v-spacer></v-spacer>
+        <v-btn @click="onCancelMonth" variant="flat" color="primary">
+          Close
+        </v-btn>
+        <v-btn @click="onSaveMonth" variant="flat" color="primary">
+          Select month
+        </v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
 </template>
 
 <script setup>
@@ -66,6 +90,10 @@ const filters = [
     text: "Сьогодні",
   },
   {
+    type: "selectMonth",
+    text: "Оберіть місяць",
+  },
+  {
     type: "year",
     text: "Рік",
   },
@@ -76,11 +104,17 @@ const filters = [
 ];
 const selectedType = ref("month");
 const isSelectDayModalOpen = ref(false);
+const isSelectMonthModalOpen = ref(false);
 const rawSelectedDate = ref(null);
+const selectedMonth = ref(null);
 const selectedDay = ref(null);
 
 const onCancelDate = () => {
   isSelectDayModalOpen.value = false;
+};
+
+const onCancelMonth = () => {
+  isSelectMonthModalOpen.value = false;
 };
 
 const isDateSelectorMultiple = computed(() => selectedType.value === "range");
@@ -114,16 +148,40 @@ const handleClick = (type) => {
     isSelectDayModalOpen.value = true;
     return;
   }
-  getDate(type);
+  if (type === "selectMonth") {
+    selectedType.value = type;
+    isSelectMonthModalOpen.value = true;
+    return;
+  }
   selectedType.value = type;
   const date = getDate(type);
-  if (date) {
+  if (date) emit("selectDate", date);
+};
+
+const onSaveMonth = () => {
+  if (selectedMonth.value) {
+    const date = {
+      startDate: formatDate(new Date(selectedMonth.value + "-01")),
+      endDate: formatDate(
+        new Date(
+          new Date(selectedMonth.value + "-01").getFullYear(),
+          new Date(selectedMonth.value + "-01").getMonth() + 1,
+          0,
+        ),
+      ),
+    };
+    console.log({ date });
     emit("selectDate", date);
   }
+  isSelectMonthModalOpen.value = false;
 };
 
 watch(isSelectDayModalOpen, (newVal) => {
   if (!newVal) selectedDay.value = null;
+});
+
+watch(isSelectMonthModalOpen, (newVal) => {
+  if (!newVal) selectedMonth.value = null;
 });
 </script>
 
